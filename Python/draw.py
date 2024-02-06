@@ -55,6 +55,6 @@ def drawStickman(x, y, r, body, rightArm, leftArm, rightLeg, leftLeg):
 
 
 drawStickman(0, 0, 10, 20, 30, 10, 10, 10)
-# drawStickman(50, 0, 30, 40, 30, 10, 10, 10)
+drawStickman(50, 0, 30, 40, 30, 10, 10, 10)
 
 turtle.mainloop()  # or turtle.exitonclick()
