@@ -13,7 +13,9 @@ while True:
             print("ACCOUNT BALANCES")
             for i, value in enumerate(accounts):
                 print(f"Acount {i}: ${value}")
-        # case 2:
+        case 2:
+            print("DEPOSIT")
+            accnum = option("Enter account #: ")
 
         # case 3: 
 
