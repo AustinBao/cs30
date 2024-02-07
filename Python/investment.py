@@ -62,23 +62,6 @@ while True:
     
     match option: 
         case 1:
-<<<<<<< HEAD
-            print("ACCOUNT BALANCES")
-            for i, value in enumerate(accounts):
-                print(f"Acount {i}: ${value}")
-        case 2:
-            print("DEPOSIT")
-            accnum = option("Enter account #: ")
-
-        # case 3: 
-
-        # case 4: 
-        
-        # case 5:
-
-        # case 6:
-            
-=======
             displayAccounts()
         case 2:
             deposit()
@@ -90,7 +73,6 @@ while True:
             generousDonor()
         case 6:
             hacker()
->>>>>>> b1d4ac1a5b0e98d9c76517035edbae6b85072217
         case 7:
             exit()
 
