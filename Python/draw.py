@@ -24,7 +24,7 @@ while True:
     # Drawing Rectangle    
     drawrect(screen, (255,0,0), (0,255,0), 30, 30, 60, 60, 100, 10)
     drawrect(screen, (255,0,0), (0,255,0), 160, 160, 20, 20, 400, 5)
-    drawrect(screen, (255,0,0), (0, 0,255), 30, 30, 60, 60, 100, 10)
+    drawrect(screen, (139,69,19), (128,0,0), 300, 300, 100, 100, 300, 1)
 
     
     # Update the display
