@@ -29,37 +29,24 @@ def main():
     dictionary = loadWordsFromFile("data-files/dictionary.txt")
     aliceWords = loadWordsFromFile("data-files/AliceInWonderLand.txt")
 
-    part = input("Part a or b: ")
-    searchtype = input("'binary' or 'linear': ")
-    counter = 0
-
+    part = int(input("Main Menu \n 1: Spell Check a Word (Linear Search) \n 2: Spell Check a Word (Binary Search) \n 3: Spell Check Alice In Wonderland (Linear Search) \n 4: Spell Check Alice In Wonderland (Binary Search) \n 5: Exit \n Enter menu selection (1-5): "))
+    
     match part:
-        case "a":
-            searchword = input("Enter word to find: ")
-            if searchtype is "binary":
-                result = binarySearch(dictionary, searchword)
-                if result == -1:
-                    return "Could not find word"
+        case 1:
+            usersword = input("Enter word to search for: ") 
+            print("Linear Search starting...")
+            if linearSearch(dictionary, usersword) != -1:
+                print(f"{usersword} is IN the dictionary at index {dictionary.index(usersword)}")
             else:
-                result = linearSearch(dictionary, searchword)
-                if result == -1:
-                    return "Could not find word"
-
-            return "Word found"
-
-        case "b":
-
-            if searchtype is "binary":
-                for word in aliceWords:
-                    result = binarySearch(dictionary, word)
-                    if result != -1:
-                        counter += 1
+                print(f"{usersword} is NOT IN the dictionary")
+        case 2:
+            usersword = input("Enter word to search for: ")
+            print("Binary Search starting...")
+            if binarySearch(dictionary, usersword) != -1:
+                print(f"'{usersword}' is IN the dictionary at index {dictionary.index(usersword)}")
             else:
-                result = linearSearch(dictionary, searchword)
-                if result == -1:
-                    return "Could not find word"
-
-            return "Word found"
+                print(f"'{usersword}' is NOT IN the dictionary")
+            
 
 def loadWordsFromFile(fileName):
     # Read file as a string
@@ -72,4 +59,4 @@ def loadWordsFromFile(fileName):
 
 
 # Call main() to begin program
-print(main())
+main()
