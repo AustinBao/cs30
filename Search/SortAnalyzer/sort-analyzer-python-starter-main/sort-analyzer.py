@@ -1,5 +1,5 @@
 # SORT ANALYZER STARTER CODE
-
+import inspect
 import time
 
 
@@ -60,69 +60,25 @@ nearlySortedData = loadDataArray("data-files/nearly-sorted-values.txt")
 fewUniqueData = loadDataArray("data-files/few-unique-values.txt")
 
 
+def sortTimes(sortType, dataset, datasetName):
+    starttime = time.time()
+    sortType(dataset)
+    endtime = time.time()
+    print(f"{sortType.__name__} on {datasetName} took: {endtime - starttime} seconds")
+
+
 # Bubble sort
-startTime = time.time()
-bubbleSort(randomData)
-endTime = time.time()
-print(f"Bubble Sort Random Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-bubbleSort(reversedData)
-endTime = time.time()
-print(f"Bubble Sort Reversed Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-bubbleSort(nearlySortedData)
-endTime = time.time()
-print(f"Bubble Sort Nearly Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-bubbleSort(fewUniqueData)
-endTime = time.time()
-print(f"Bubble Sort Random Data: {endTime - startTime} seconds")
-
-
-
-
-startTime = time.time()
-selectionSort(randomData)
-endTime = time.time()
-print(f"Selection Sort Random Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-selectionSort(reversedData)
-endTime = time.time()
-print(f"Selection Sort Reversed Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-selectionSort(nearlySortedData)
-endTime = time.time()
-print(f"Selection Sort Nearly Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-selectionSort(fewUniqueData)
-endTime = time.time()
-print(f"Selection Sort Random Data: {endTime - startTime} seconds")
-
-
-
-
-startTime = time.time()
-insertionSort(randomData)
-endTime = time.time()
-print(f"insertion Sort Random Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-insertionSort(reversedData)
-endTime = time.time()
-print(f"insertion Sort Reversed Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-insertionSort(nearlySortedData)
-endTime = time.time()
-print(f"insertion Sort Nearly Data: {endTime - startTime} seconds")
-
-startTime = time.time()
-insertionSort(fewUniqueData)
-endTime = time.time()
-print(f"insertion Sort Random Data: {endTime - startTime} seconds")
+# sortTimes(bubbleSort, randomData, "randomData")
+# sortTimes(bubbleSort, reversedData, "reversedData")
+# sortTimes(bubbleSort, nearlySortedData, "nearlySortedData")
+# sortTimes(bubbleSort, fewUniqueData, "fewUniqueData")
+# Selection sort
+# sortTimes(selectionSort, randomData, "randomData")
+# sortTimes(selectionSort, reversedData, "reversedData")
+# sortTimes(selectionSort, nearlySortedData, "nearlySortedData")
+# sortTimes(selectionSort, fewUniqueData, "fewUniqueData")
+# Insertion sort
+sortTimes(insertionSort, randomData, "randomData")
+sortTimes(insertionSort, reversedData, "reversedData")
+sortTimes(insertionSort, nearlySortedData, "nearlySortedData")
+sortTimes(insertionSort, fewUniqueData, "fewUniqueData")
