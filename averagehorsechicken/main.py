@@ -1,12 +1,15 @@
 import pygame
+import player
 
 pygame.init()
 
+# https://www.youtube.com/watch?v=ST-Qq3WBZBE
 # https://www.youtube.com/watch?v=xYhniILN6Ls
 # https://stackoverflow.com/questions/74978204/how-to-draw-a-dashed-line-in-python-using-pygame
 
 SCREEN_WIDTH = 1100
 SCREEN_HEIGHT = 800
+CLOCK = pygame.time.Clock()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Level Editor')
@@ -26,6 +29,10 @@ MAIN_COLS = SCREEN_WIDTH // TILE_SIZE
 SMALL_ROWS = SCREEN_HEIGHT // 4
 SMALL_COLS = SCREEN_WIDTH // 4
 
+
+racoon = player.Player(200, 200, 0.15, "rac.png")
+
+
 # Loading images
 background = pygame.image.load("imgs/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -33,7 +40,6 @@ background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 def draw_bkg():
 	screen.fill(WHITE)
 	screen.blit(background, (0, 0))
-
 
 def draw_main_grid():
 	#vertical lines
@@ -53,6 +59,11 @@ def draw_smaller_grid():
 		pygame.draw.line(screen, LIGHTBLUE, (0, r * TILE_SIZE / 4), (SCREEN_WIDTH, r * TILE_SIZE / 4), 3)
 
 
+def draw_player(self, screen):
+        screen.blit(self.image, (self.x, self.y))
+
+
+
 run = True
 while run:
 	
@@ -63,9 +74,13 @@ while run:
 	for event in pygame.event.get(): 
 		if event.type == pygame.QUIT:
 			run = False
+	
+	racoon.move()
+
+	draw_player(racoon, screen)
 
 	pygame.display.update()
-
+	CLOCK.tick(60)
 
 pygame.quit()
 
