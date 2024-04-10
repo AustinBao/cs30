@@ -1,5 +1,7 @@
 import pygame
+import os
 import player
+import button
 
 pygame.init()
 
@@ -21,17 +23,24 @@ RED = (200, 25, 25)
 BLACK = (0, 0, 0)
 BLUE = (111, 143, 175)
 LIGHTBLUE = (173, 216, 230)
+CARDBOARD = (159, 135, 103)
+
 #define game variables
+isPregameOpen = True
+current_tile = 0
 TILE_SIZE = 100
 MAIN_ROWS = SCREEN_HEIGHT // TILE_SIZE
 MAIN_COLS = SCREEN_WIDTH // TILE_SIZE
-
 SMALL_ROWS = SCREEN_HEIGHT // 4
 SMALL_COLS = SCREEN_WIDTH // 4
+PREGAME_WIDTH = 500
+PREGAME_HEIGHT = 300
+START_PREGAME_X = (SCREEN_WIDTH - PREGAME_WIDTH) // 2
+START_PREGAME_Y = (SCREEN_HEIGHT - PREGAME_HEIGHT) // 2
 
 
-racoon = player.Player(200, 200, 0.15, "rac.png")
-
+# Load player
+racoon = player.Player(200, 200, 0.1, "rac.png")
 
 # Loading images
 background = pygame.image.load("imgs/background.png")
@@ -60,17 +69,49 @@ def draw_smaller_grid():
 
 
 def draw_player(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+    screen.blit(self.image, (self.x, self.y))
 
 
+# load all item images for the pregame (not scaled)
+pre_game_img_list = []
+# place items are all scaled to match the grid
+place_item_list = []
+number_of_items = len(os.listdir('imgs/items'))
+for i in range(number_of_items):
+	img = pygame.image.load(f'imgs/items/{i}.png')
+	pre_game_img = pygame.transform.scale(img, (200, 200))
+	pre_game_img_list.append(pre_game_img)
+
+	scaled_img = pygame.transform.scale(img, (TILE_SIZE, TILE_SIZE))
+	place_item_list.append(scaled_img)
+
+# convert imgs into button objects
+button_list = []
+button_col = 0
+for i in range(len(pre_game_img_list)):
+	tile_button = button.Button(START_PREGAME_X + 20 + (button_col * TILE_SIZE), START_PREGAME_Y + 60, pre_game_img_list[i], 1)
+	button_list.append(tile_button)
+	button_col += 1
+		
+
+
+def draw_pre_game():
+	pygame.draw.rect(screen, CARDBOARD, pygame.Rect(START_PREGAME_X, START_PREGAME_Y, PREGAME_WIDTH, PREGAME_HEIGHT))
+	
 
 run = True
 while run:
-	
+
 	draw_bkg()
 	draw_smaller_grid()
 	draw_main_grid()
+	draw_pre_game()
 
+	button_count = 0
+	for current_count, b in enumerate(button_list):
+		if b.draw(screen):
+			current_tile = button_count
+	
 	for event in pygame.event.get(): 
 		if event.type == pygame.QUIT:
 			run = False
