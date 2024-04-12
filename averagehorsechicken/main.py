@@ -11,7 +11,6 @@ pygame.init()
 
 SCREEN_WIDTH = 1100
 SCREEN_HEIGHT = 800
-CLOCK = pygame.time.Clock()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Level Editor')
@@ -27,20 +26,22 @@ CARDBOARD = (159, 135, 103)
 
 #define game variables
 isPregameOpen = True
+isPlaceItemOpen = True
 current_tile = 0
-TILE_SIZE = 100
+number_of_players = 1
+TILE_SIZE = 100 
 MAIN_ROWS = SCREEN_HEIGHT // TILE_SIZE
 MAIN_COLS = SCREEN_WIDTH // TILE_SIZE
 SMALL_ROWS = SCREEN_HEIGHT // 4
 SMALL_COLS = SCREEN_WIDTH // 4
-PREGAME_WIDTH = 500
-PREGAME_HEIGHT = 300
+PREGAME_WIDTH = 700
+PREGAME_HEIGHT = 600
 START_PREGAME_X = (SCREEN_WIDTH - PREGAME_WIDTH) // 2
 START_PREGAME_Y = (SCREEN_HEIGHT - PREGAME_HEIGHT) // 2
 
 
 # Load player
-racoon = player.Player(200, 200, 0.1, "rac.png")
+racoon = player.Player(150, 600, 0.08, "rac.png")
 
 # Loading images
 background = pygame.image.load("imgs/background.png")
@@ -73,23 +74,19 @@ def draw_player(self, screen):
 
 
 # load all item images for the pregame (not scaled)
-pre_game_img_list = []
 # place items are all scaled to match the grid
 place_item_list = []
-number_of_items = len(os.listdir('imgs/items'))
+number_of_items = len(os.listdir('imgs/items')) - 1
 for i in range(number_of_items):
 	img = pygame.image.load(f'imgs/items/{i}.png')
-	pre_game_img = pygame.transform.scale(img, (200, 200))
-	pre_game_img_list.append(pre_game_img)
-
-	scaled_img = pygame.transform.scale(img, (TILE_SIZE, TILE_SIZE))
+	scaled_img = pygame.transform.scale_by(img, 0.7)
 	place_item_list.append(scaled_img)
 
 # convert imgs into button objects
 button_list = []
 button_col = 0
-for i in range(len(pre_game_img_list)):
-	tile_button = button.Button(START_PREGAME_X + 20 + (button_col * TILE_SIZE), START_PREGAME_Y + 60, pre_game_img_list[i], 1)
+for i in range(len(place_item_list)):
+	tile_button = button.Button(START_PREGAME_X + (button_col * 130) + 50, START_PREGAME_Y + 150 , place_item_list[i], 1, i)
 	button_list.append(tile_button)
 	button_col += 1
 		
@@ -102,26 +99,46 @@ def draw_pre_game():
 run = True
 while run:
 
-	draw_bkg()
-	draw_smaller_grid()
-	draw_main_grid()
-	draw_pre_game()
-
-	button_count = 0
-	for current_count, b in enumerate(button_list):
-		if b.draw(screen):
-			current_tile = button_count
-	
+	if isPregameOpen:
+		draw_bkg()
+		draw_pre_game()
+		selected_items = []
+		for current_count, b in enumerate(button_list):
+			if b.draw(screen):
+				selected_items.append(b.id)
+				print(selected_items)
+				if len(selected_items) == number_of_players:
+					isPregameOpen = False
+	else:
+		if isPlaceItemOpen:
+			draw_bkg()
+			draw_smaller_grid()
+			draw_main_grid()
+			pos = pygame.mouse.get_pos()
+			for items in selected_items:
+				img = pygame.image.load(f'imgs/items/{items}.png')
+				# If the items are long vertical items, scale differently
+				if items == 1 or items == 3: 
+					img = pygame.transform.scale(img, (25, TILE_SIZE))
+				# If items is crossbow
+				elif items == 0:
+					img = pygame.transform.scale(img, (25, TILE_SIZE//2))
+				# If items are one tile 
+				else:
+					img = pygame.transform.scale(img, (25, 25))
+				img.set_alpha(128)
+				screen.blit(img, (pos[0] - img.get_width(), pos[1] - img.get_height()))
+			
+		else:
+			draw_player(racoon, screen)
+			racoon.move()	
+			
 	for event in pygame.event.get(): 
 		if event.type == pygame.QUIT:
 			run = False
+
 	
-	racoon.move()
-
-	draw_player(racoon, screen)
-
 	pygame.display.update()
-	CLOCK.tick(60)
 
 pygame.quit()
 
