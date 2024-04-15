@@ -1,11 +1,13 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    Y_GRAVITY = 0.14
-    JUMP_HEIGHT = 7
-    Y_VELOCITY = JUMP_HEIGHT
+    TILE_SIZE_MAIN = 100
+    TILE_SIZE_SMALL = TILE_SIZE_MAIN // 4
 
-    def __init__(self, x, y, scale, img):
+    Y_GRAVITY = 0.3
+    JUMP_HEIGHT = 10
+
+    def __init__(self, x, y, scale, img, world_data):
         pygame.sprite.Sprite.__init__(self)
         self.original_img = pygame.image.load(f'imgs/characters/{img}.png')
         self.jumping_img = pygame.image.load(f'imgs/characters/{img}_jump.png')
@@ -13,9 +15,13 @@ class Player(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.jumping = False
+        self.Y_VELOCITY = Player.JUMP_HEIGHT
+        self.world_data = world_data
         self.image = self.transform_image(self.original_img)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
 
     def transform_image(self, img, flip=False):
         img = pygame.transform.flip(img, flip, False)
@@ -31,27 +37,64 @@ class Player(pygame.sprite.Sprite):
             flip = keys[move_keys['left']] and not keys[move_keys['right']]
         self.image = self.transform_image(img, flip)
 
+    def on_ground(self):
+        return not self.can_move_to(self.x, self.y + self.height + 1)
+
+    def can_move_to(self, x, y):
+        grid_x = x // Player.TILE_SIZE_SMALL
+        grid_y = y // Player.TILE_SIZE_SMALL
+
+        # Check window boundaries first
+        if grid_x < 0 or grid_x >= len(self.world_data[0]) or grid_y < 0 or grid_y >= len(self.world_data):
+            return False
+        
+        # Check if the cell is solid by checking if cell is -1 (empty)
+        return self.world_data[int(grid_y)][int(grid_x)] == -1
+
+
     def update_position(self, keys, move_keys):
+        dx, dy = 0, 0
+
         if keys[move_keys['left']]:
-            self.x -= 3
+            dx -= 3
         if keys[move_keys['right']]:
-            self.x += 3
+            dx += 3
         if keys[move_keys['up']]:
             self.jumping = True
         if keys[move_keys['down']]:
-            self.y += 3
+            dy += 3
 
-    def handle_jumping(self):
+        if self.can_move_to(self.x + dx, self.y):
+            self.x += dx
+
         if self.jumping:
-            self.y -= Player.Y_VELOCITY
-            Player.Y_VELOCITY -= Player.Y_GRAVITY
-            if Player.Y_VELOCITY < -Player.JUMP_HEIGHT:
-                self.jumping = False
-                Player.Y_VELOCITY = Player.JUMP_HEIGHT
+            if self.can_move_to(self.x, self.y - self.Y_VELOCITY):
+                self.y -= self.Y_VELOCITY
+            else:
+                self.jumping = False  
+                self.Y_VELOCITY = self.JUMP_HEIGHT  # Reset the jump velocity
+
+        if not self.jumping and not self.on_ground():
+            # Gravity effect
+            if self.can_move_to(self.x, self.y + 1):
+                self.y += 1  # Simulate gravity if in air
+            else:
+                self.Y_VELOCITY = self.JUMP_HEIGHT  # Reset when on ground
+
+
+    def handle_jumping(self, keys, move_keys):
+        if keys[move_keys['up']] and self.on_ground():
+            self.jumping = True
+
+        if self.jumping:
+            self.Y_VELOCITY -= self.Y_GRAVITY
+            if self.Y_VELOCITY < -self.JUMP_HEIGHT:
+                self.jumping = False  
+
 
     def move(self, move_keys):
         keys = pygame.key.get_pressed()
         self.update_position(keys, move_keys)
         self.update_image(keys, move_keys)
-        self.handle_jumping()
+        self.handle_jumping(keys, move_keys)
         self.rect.center = (self.x, self.y)

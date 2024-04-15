@@ -10,6 +10,7 @@ class Button():
 		self.rect.topleft = (x, y)
 		self.clicked = False
 		self.id = id
+		self.visible = True 
 
 	def draw(self, surface):
 		action = False
@@ -23,11 +24,14 @@ class Button():
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				action = True
 				self.clicked = True
+				# Make button invisible after being pressed
+				self.visible = False
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
 
 		#draw button
-		surface.blit(self.image, (self.rect.x, self.rect.y))
+		if self.visible:
+			surface.blit(self.image, (self.rect.x, self.rect.y))
 
 		return action
