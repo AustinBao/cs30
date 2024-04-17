@@ -2,7 +2,6 @@ import pygame
 import os
 import player
 import button
-import time
 
 
 pygame.init()
@@ -26,7 +25,7 @@ BLUE = (111, 143, 175)
 LIGHTBLUE = (173, 216, 230)
 CARDBOARD = (159, 135, 103)
 
-#define game variables
+#define game variables/states
 isPregameOpen = True
 isItemChosen = False
 isItemsPlaced = False
@@ -37,6 +36,8 @@ item_placement_pending = False  # True if an item is selected but not placed
 current_tile = 0
 number_of_players = 2
 selected_items = []
+coordinates_of_items = []
+
 TILE_SIZE_MAIN = 100
 TILE_SIZE_SMALL = TILE_SIZE_MAIN // 4
 MAIN_ROWS = SCREEN_HEIGHT // TILE_SIZE_MAIN
@@ -77,8 +78,8 @@ for row in range(SMALL_ROWS):
 player1_keys = {'left': pygame.K_a, 'right': pygame.K_d, 'up': pygame.K_w, 'down': pygame.K_s}
 player2_keys = {'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
 
-racoon = player.Player(150, 600, 0.08, "rac", world_data) # player 1
-iguana = player.Player(140, 600, 0.08, "ig", world_data) # player 2
+racoon = player.Player(150, 600, 0.08, "rac") # player 1
+iguana = player.Player(140, 600, 0.08, "ig") # player 2
 
 background = pygame.image.load("imgs/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -112,12 +113,13 @@ def draw_player(self, screen):
 def draw_pre_game():
 	pygame.draw.rect(screen, CARDBOARD, pygame.Rect(START_PREGAME_X, START_PREGAME_Y, PREGAME_WIDTH, PREGAME_HEIGHT))
 	
+	
 def draw_world():
 	for y, row in enumerate(world_data):
 		for x, tile in enumerate(row):
 			if tile >= 0:
 				img = pygame.image.load(f'imgs/items/{tile}.png')
-				img = pygame.transform.scale(img, (TILE_SIZE_SMALL + 4,TILE_SIZE_SMALL + 4))
+				img = pygame.transform.scale(img, (TILE_SIZE_SMALL,TILE_SIZE_SMALL))
 				screen.blit(img, (x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL))
 
 def placeitem(id, x, y):
@@ -127,7 +129,10 @@ def placeitem(id, x, y):
 				world_data[y - i][x] = id
 		else:
 			world_data[y][x] = id
+		coordinates_of_items.append((y * 25, x * 25))
 		print("Updated world_data at ({}, {}):".format(y, x))
+		print("Pixel location at: {}, {}". format(y * 25, x * 25))
+		print(coordinates_of_items)
 
 def scaleitem(item, img):
 	if item == 1 or item == 3: 
