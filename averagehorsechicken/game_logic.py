@@ -14,7 +14,7 @@ SCREEN_WIDTH = 1100
 SCREEN_HEIGHT = 800
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Level Editor')
+pygame.display.set_caption('Average Horse Chicken')
 
 #define colours
 GREEN = (144, 201, 120)
@@ -36,7 +36,7 @@ item_placement_pending = False  # True if an item is selected but not placed
 current_tile = 0
 number_of_players = 2
 selected_items = []
-coordinates_of_items = []
+platforms = []
 
 TILE_SIZE_MAIN = 100
 TILE_SIZE_SMALL = TILE_SIZE_MAIN // 4
@@ -129,16 +129,16 @@ def placeitem(id, x, y):
 				world_data[y - i][x] = id
 		else:
 			world_data[y][x] = id
-		coordinates_of_items.append((y * 25, x * 25))
-		print("Updated world_data at ({}, {}):".format(y, x))
-		print("Pixel location at: {}, {}". format(y * 25, x * 25))
-		print(coordinates_of_items)
+		data = {"y": y * TILE_SIZE_SMALL, "x": x * TILE_SIZE_SMALL}
+		platforms.append(pygame.Rect(data["y"], data["x"], TILE_SIZE_SMALL, TILE_SIZE_SMALL))
+		print(platforms)
 
 def scaleitem(item, img):
 	if item == 1 or item == 3: 
 		return pygame.transform.scale(img, (TILE_SIZE_SMALL, TILE_SIZE_MAIN))
 	else:
 		return pygame.transform.scale(img, (TILE_SIZE_SMALL, TILE_SIZE_SMALL))
+
 
 run = True
 while run:
@@ -194,9 +194,10 @@ while run:
 		draw_world()
 		draw_player(racoon, screen)
 		draw_player(iguana, screen)
-		racoon.move(player1_keys)
-		iguana.move(player2_keys)
+		racoon.move(player1_keys, platforms)
+		iguana.move(player2_keys, platforms)
 	
+
 
 	pygame.display.update()
 
