@@ -3,7 +3,6 @@ import os
 import player
 import button
 
-
 pygame.init()
 
 # https://www.youtube.com/watch?v=ST-Qq3WBZBE
@@ -54,6 +53,7 @@ place_item_list = []
 number_of_items = len(os.listdir('imgs/items')) - 1
 for i in range(number_of_items):
 	img = pygame.image.load(f'imgs/items/{i}.png')
+	# solely scales the last item since the png is enormous
 	if i == 5:
 		scaled_img = pygame.transform.scale(img, (TILE_SIZE_MAIN//2, TILE_SIZE_MAIN//2))
 	else:
@@ -78,8 +78,8 @@ for row in range(SMALL_ROWS):
 player1_keys = {'left': pygame.K_a, 'right': pygame.K_d, 'up': pygame.K_w, 'down': pygame.K_s}
 player2_keys = {'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
 
-racoon = player.Player(150, 600, 0.08, "rac") # player 1
-iguana = player.Player(140, 600, 0.08, "ig") # player 2
+racoon = player.Player("rac") # player 1
+iguana = player.Player("ig") # player 2
 
 background = pygame.image.load("imgs/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -96,18 +96,15 @@ def draw_main_grid():
 	for r in range(MAIN_ROWS + 1):
 		pygame.draw.line(screen, BLUE, (0, r * TILE_SIZE_MAIN), (SCREEN_WIDTH, r * TILE_SIZE_MAIN), 3)
 
-
 def draw_smaller_grid():
-	#vertical lines
 	for c in range(SMALL_COLS + 1):
 		pygame.draw.line(screen, LIGHTBLUE, (c * TILE_SIZE_SMALL, 0), (c * TILE_SIZE_SMALL, SCREEN_HEIGHT), 3)
-	#horizontal lines
 	for r in range(SMALL_ROWS + 1):
 		pygame.draw.line(screen, LIGHTBLUE, (0, r * TILE_SIZE_SMALL), (SCREEN_WIDTH, r *TILE_SIZE_SMALL), 3)
 
 
 def draw_player(self, screen):
-    screen.blit(self.image, (self.x, self.y))
+    screen.blit(self.image, (self.rect.x, self.rect.y))
 
 
 def draw_pre_game():
@@ -119,7 +116,12 @@ def draw_world():
 		for x, tile in enumerate(row):
 			if tile >= 0:
 				img = pygame.image.load(f'imgs/items/{tile}.png')
-				img = pygame.transform.scale(img, (TILE_SIZE_SMALL,TILE_SIZE_SMALL))
+				if tile == 0:
+					img = pygame.transform.scale(img, (TILE_SIZE_SMALL,TILE_SIZE_MAIN//2))
+				elif tile == 1 and tile == 3:
+					img = pygame.transform.scale(img, (TILE_SIZE_SMALL,TILE_SIZE_MAIN))
+				else:
+					img = pygame.transform.scale(img, (TILE_SIZE_SMALL,TILE_SIZE_SMALL))
 				screen.blit(img, (x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL))
 
 def placeitem(id, x, y):
@@ -127,15 +129,19 @@ def placeitem(id, x, y):
 		if id == 1 or id == 3:
 			for i in range(4):
 				world_data[y - i][x] = id
+		elif id == 0:
+			world_data[y - 1][x] = id
 		else:
 			world_data[y][x] = id
-		data = {"y": y * TILE_SIZE_SMALL, "x": x * TILE_SIZE_SMALL}
-		platforms.append(pygame.Rect(data["y"], data["x"], TILE_SIZE_SMALL, TILE_SIZE_SMALL))
+		platforms.append(pygame.Rect(y * TILE_SIZE_SMALL, x * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL))
 		print(platforms)
+		
 
 def scaleitem(item, img):
 	if item == 1 or item == 3: 
 		return pygame.transform.scale(img, (TILE_SIZE_SMALL, TILE_SIZE_MAIN))
+	elif item == 0: 
+		return pygame.transform.scale(img, (TILE_SIZE_SMALL, TILE_SIZE_MAIN//2))
 	else:
 		return pygame.transform.scale(img, (TILE_SIZE_SMALL, TILE_SIZE_SMALL))
 
@@ -185,7 +191,7 @@ while run:
 			img = pygame.image.load(f'imgs/items/{item_being_placed}.png')
 			img = scaleitem(item_being_placed, img)
 			img.set_alpha(128)
-			screen.blit(img, (pos[0] - img.get_width() // 2, pos[1] - img.get_height() // 2))
+			screen.blit(img, (pos[0] - img.get_width(), pos[1] - img.get_height()))
 
 		draw_world()
 
@@ -193,9 +199,16 @@ while run:
 		draw_bkg()
 		draw_world()
 		draw_player(racoon, screen)
-		draw_player(iguana, screen)
+		# draw_player(iguana, screen)
 		racoon.move(player1_keys, platforms)
-		iguana.move(player2_keys, platforms)
+		# iguana.move(player2_keys, platforms)
+		player_image_rect = racoon.rect
+		player_position = (racoon.rect.centerx, racoon.rect.centery)
+		player_image_rect.center = player_position
+		hitbox_rect = pygame.Rect(0, 0, racoon.img_width, racoon.img_height)
+		hitbox_rect.center = player_image_rect.center
+		screen.blit(racoon.image, player_image_rect.topleft)
+		pygame.draw.rect(screen, (255, 0, 0), hitbox_rect, 2)
 	
 
 
