@@ -1,12 +1,14 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-
+    
     def __init__(self, img):
         pygame.sprite.Sprite.__init__(self)
         self.scale = 0.08
-        self.gravity = 5
-        self.on_ground = False
+        self.player_y_momentum = 0
+        self.air_timer = 0
+        self.moving_right = False
+        self.moving_left = False
         self.original_img = pygame.image.load(f'imgs/characters/{img}.png')
         self.jumping_img = pygame.image.load(f'imgs/characters/{img}_jump.png')
         self.rect = self.original_img.get_rect()
@@ -23,11 +25,12 @@ class Player(pygame.sprite.Sprite):
         return scaled_img
 
     def update_image(self, keys, move_keys):
-        if keys[move_keys['left']]:
-            if self.on_ground:
-                img = self.original_img
-            else:
+        if keys[move_keys['left']]: 
+            img = self.original_img
+
+            if keys[move_keys['up']]:
                 img = self.jumping_img
+            
             flip = True
             self.image = self.transform_image(img, flip)
 
@@ -38,25 +41,48 @@ class Player(pygame.sprite.Sprite):
         if keys[move_keys['right']]:
             self.image = self.transform_image(self.original_img)
             dx += 3
-        if keys[move_keys['up']] and self.on_ground:
-            self.on_ground = False
-            dy -= 10
+        if keys[move_keys['up']]:
+            if self.air_timer < 6:
+                self.player_y_momentum = -5
+            
         self.rect.x += dx
         self.rect.y += dy
 
-    # def apply_gravity(self):
-    #     if not self.on_ground:
-    #         self.rect.bottom += self.gravity
-    
-    def check_collisions(self, platforms):
-        collide_index = self.rect.collidelistall(platforms)
-        print(collide_index)
-        # collide = pygame.Rect.colliderect(self.rect, player_rect2)
+    def check_collisions(self, keys, move_keys, platforms):
+        print(self.rect)
+        print(self.rect.collidelistall(platforms))
+    # def collision_test(rect, tiles):
+    #     hit_list = []
+    #     for tile in tiles:
+    #         if rect.colliderect(tile):
+    #             hit_list.append(tile)
+    #     return hit_list
+
+    # def move(rect, movement, tiles):
+    #     collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
+    #     rect.x += movement[0]
+    #     hit_list = Player.collision_test(rect, tiles)
+    #     for tile in hit_list:
+    #         if movement[0] > 0:
+    #             rect.right = tile.left
+    #             collision_types['right'] = True
+    #         elif movement[0] < 0:
+    #             rect.left = tile.right
+    #             collision_types['left'] = True
+    #     rect.y += movement[1]
+    #     hit_list = Player.collision_test(rect, tiles)
+    #     for tile in hit_list:
+    #         if movement[1] > 0:
+    #             rect.bottom = tile.top
+    #             collision_types['bottom'] = True
+    #         elif movement[1] < 0:
+    #             rect.top = tile.bottom
+    #             collision_types['top'] = True
+    #     return rect, collision_types
     
     def move(self, move_keys, platforms): 
         keys = pygame.key.get_pressed()
         self.update_position(keys, move_keys)
         self.update_image(keys, move_keys)
-        self.check_collisions(platforms)
-        # self.apply_gravity()
+        self.check_collisions(keys, move_keys, platforms)
         

@@ -129,13 +129,16 @@ def placeitem(id, x, y):
 		if id == 1 or id == 3:
 			for i in range(4):
 				world_data[y - i][x] = id
+				platforms.append(pygame.Rect(x * TILE_SIZE_SMALL, y - i * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL))
 		elif id == 0:
 			world_data[y - 1][x] = id
+			platforms.append(pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL))
 		else:
 			world_data[y][x] = id
-		platforms.append(pygame.Rect(y * TILE_SIZE_SMALL, x * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL))
+			platforms.append(pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL))
+	
 		print(platforms)
-		
+	
 
 def scaleitem(item, img):
 	if item == 1 or item == 3: 
@@ -209,8 +212,9 @@ while run:
 		hitbox_rect.center = player_image_rect.center
 		screen.blit(racoon.image, player_image_rect.topleft)
 		pygame.draw.rect(screen, (255, 0, 0), hitbox_rect, 2)
-	
-
+		print(player_image_rect)
+		
+		
 
 	pygame.display.update()
 
