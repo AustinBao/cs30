@@ -2,7 +2,7 @@ import pygame
 
 #button class
 class Button():
-	def __init__(self,x, y, image, scale, id):
+	def __init__(self, x, y, image, scale, id):
 		width = image.get_width()
 		height = image.get_height()
 		self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
@@ -10,28 +10,19 @@ class Button():
 		self.rect.topleft = (x, y)
 		self.clicked = False
 		self.id = id
-		self.visible = True 
 
 	def draw(self, surface):
 		action = False
-
-		#get mouse position (x, y) tuple
 		pos = pygame.mouse.get_pos()
-		# print(pos)
 
-		#check mouseover and clicked conditions
 		if self.rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				action = True
 				self.clicked = True
-				# Make button invisible after being pressed
-				self.visible = False
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
 
-		#draw button
-		if self.visible:
-			surface.blit(self.image, (self.rect.x, self.rect.y))
+		surface.blit(self.image, (self.rect.x, self.rect.y))
 
 		return action
