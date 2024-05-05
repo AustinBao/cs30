@@ -6,10 +6,6 @@ import crossbow
 
 pygame.init()
 
-# https://www.youtube.com/watch?v=ST-Qq3WBZBE
-# https://www.youtube.com/watch?v=xYhniILN6Ls
-# https://stackoverflow.com/questions/74978204/how-to-draw-a-dashed-line-in-python-using-pygame
-
 SCREEN_WIDTH = 1100
 SCREEN_HEIGHT = 800
 
@@ -233,7 +229,6 @@ while run:
                 item_being_placed = None
                 item_placement_pending = False
 
-                # Automatically load the next item if available
                 if len(selected_items) > 0:
                     item_being_placed = selected_items.pop(0)
                     item_placement_pending = True
@@ -295,11 +290,14 @@ while run:
 
         if racoon.rect.colliderect(flag):
             isGameOver = True
-            # Winner, Loser
+                    # Winner, Loser
             game_over(racoon, iguana)
+            racoon.dead = True
+
         elif iguana.rect.colliderect(flag):
             isGameOver = True
             game_over(iguana, racoon)
+            iguana.dead = True
 
     if isRoundOver:
         resetround(racoon, iguana)

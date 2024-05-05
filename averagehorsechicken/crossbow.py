@@ -1,6 +1,5 @@
 import pygame
 
-
 class Crossbow:
     def __init__(self, pos):
         self.image = pygame.image.load("imgs/items/0.png")
