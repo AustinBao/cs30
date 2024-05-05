@@ -10,7 +10,7 @@ class Crossbow:
         self.projectiles = pygame.sprite.Group()
 
     def shoot(self):
-        projectile = Projectile((self.rect.centerx, self.rect.top))  # Shoot from the top of the crossbow
+        projectile = Projectile((self.rect.centerx + 12, self.rect.top))  # Shoot from the top of the crossbow
         self.projectiles.add(projectile)
 
     def update(self):
@@ -32,5 +32,6 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.y += self.speed
         if self.rect.bottom < 0:
             self.kill()
+
 
 

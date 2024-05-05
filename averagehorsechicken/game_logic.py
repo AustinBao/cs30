@@ -39,6 +39,7 @@ current_tile = 0
 number_of_players = 2
 selected_items = []
 platforms = []
+crossbows = []
 font = pygame.font.Font(None, 64)
 flag = pygame.Rect(125, 150, 25, 25)
 
@@ -148,13 +149,18 @@ def placeitem(id, x, y):
         if id == 1 or id == 3:
             for i in range(4):
                 world_data[y - i][x] = id
-                platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, (y - i) * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
+                platforms.append(
+                    (pygame.Rect(x * TILE_SIZE_SMALL, (y - i) * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
         elif id == 0:
             world_data[y - 1][x] = id
-            platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
+            new_crossbow = crossbow.Crossbow((x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL))
+            crossbows.append(new_crossbow)
+            platforms.append(
+                (pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
         else:
             world_data[y][x] = id
-            platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
+            platforms.append(
+                (pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
     print(platforms)
 
 
@@ -206,7 +212,7 @@ def reset_game(player1, player2):
     isGameOver = False
     resetround(player1, player2)
 
-crossbow = crossbow.Crossbow((100, 700))
+
 clock = pygame.time.Clock()
 
 run = True
@@ -249,24 +255,36 @@ while run:
     if isItemChosen:
         draw_smaller_grid()
         draw_main_grid()
-
         if item_placement_pending:
             img = pygame.image.load(f'imgs/items/{item_being_placed}.png')
             img = scaleitem(item_being_placed, img)
             img.set_alpha(128)
             screen.blit(img, (pos[0] - img.get_width(), pos[1] - img.get_height()))
-
         draw_world()
 
     if isItemsPlaced:
         draw_world()
-
-        crossbow.update()
-        screen.blit(crossbow.scaled_img, crossbow.rect)
-        crossbow.projectiles.draw(screen)
-
         draw_player(racoon, screen)
         draw_player(iguana, screen)
+
+        if len(crossbows) > 0:
+            for individual_crossbow in crossbows:
+                individual_crossbow.update()
+                individual_crossbow.projectiles.draw(screen)
+
+            for individual_crossbow in crossbows:
+                for projectile in individual_crossbow.projectiles:
+                    for platform_rect, _ in platforms:
+                        if platform_rect.colliderect(projectile.rect):
+                            projectile.kill()  # Remove projectile when it hits a platform
+                            break
+                    if racoon.rect.colliderect(projectile.rect):
+                        racoon.dead = True
+                        projectile.kill()
+                    elif iguana.rect.colliderect(projectile.rect):
+                        iguana.dead = True
+                        projectile.kill()
+
         if not racoon.dead:
             racoon.move(player1_keys, platforms)
         if not iguana.dead:
@@ -290,4 +308,3 @@ while run:
     pygame.display.update()
 
 pygame.quit()
-

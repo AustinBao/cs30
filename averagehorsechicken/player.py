@@ -36,54 +36,41 @@ class Player(pygame.sprite.Sprite):
         return scaled_img
 
     def check_collisions(self, platforms, dx, dy):
-        rectangle_objects = []
+        horizontal_collision = False
+        vertical_collision = False
+
+        # Create rectangles for the character's current and updated positions
+        current_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
+        updated_rect = pygame.Rect(self.rect.x + dx, self.rect.y + dy, self.rect.width, self.rect.height)
+
+        # Check for collisions with platforms
         for platform, platform_id in platforms:
-            rectangle_objects.append(platform)
+            if updated_rect.colliderect(platform):
+                # Handle horizontal collision
+                if dx > 0:
+                    current_rect.right = platform.left
+                    horizontal_collision = True
+                elif dx < 0:
+                    current_rect.left = platform.right
+                    horizontal_collision = True
 
-        temp = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
-        # Horizontal movement
-        if dx != 0:
-            temp.x += dx
-            collided = temp.collidelistall(rectangle_objects)
-            if len(collided) > 0:
-                for platform, platform_id in platforms:
-                    if temp.colliderect(platform):
-                        if platform_id == 3 or platform_id == 4:
-                            self.dead = True
-                        # If moving right, set right edge to left edge of the platform
-                        if dx > 0:
-                            self.rect.right = platform.left
-                            self.moving_right = False
-                        # If moving left, set left edge to right edge of the platform
-                        elif dx < 0:
-                            self.rect.left = platform.right
-                            self.moving_left = False
-            # if no collision is detected, it is safe to move the character
-            else:
-                self.rect.x += dx
+                # Handle vertical collision
+                if dy > 0:
+                    current_rect.bottom = platform.top
+                    vertical_collision = True
+                elif dy < 0:
+                    current_rect.top = platform.bottom
+                    vertical_collision = True
 
-        # Vertical movement
-        if dy != 0:
-            temp.y += dy
-            collided = temp.collidelistall(rectangle_objects)
-            if len(collided) > 0:
-                for platform, platform_id in platforms:
-                    if temp.colliderect(platform):
-                        if platform_id == 3 or platform_id == 4:
-                            self.dead = True
-                        # If jumping (moving up), set top edge to bottom edge of the platform
-                        if dy < 0:
-                            self.rect.top = platform.bottom
-                            self.jumping = False
-                            self.y_velocity = self.jump_height
-                            self.on_ground = True
-                        # If falling (moving down), set bottom edge to top edge of the platform
-                        elif dy > 0:
-                            self.rect.bottom = platform.top
-                            self.on_ground = True
-                            self.can_jump = True
-            else:
-                self.rect.y += dy
+        # Update position based on collisions
+        if not horizontal_collision:
+            self.rect.x += dx
+        if not vertical_collision:
+            self.rect.y += dy
+
+        # Adjust vertical movement if there's a horizontal collision while jumping
+        if self.jumping and horizontal_collision and not vertical_collision:
+            self.rect.y += dy
 
     def listen_to_movement(self, keys, move_keys, platforms):
         dx, dy = 0, 0
