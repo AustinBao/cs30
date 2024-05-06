@@ -34,7 +34,6 @@ isItemChosen = False
 isItemsPlaced = False
 isPlayerOneItemPlaced = False
 isPlayerTwoItemPlaced = False
-isRoundOver = False
 isGameOver = False
 # Track the item ID currently being placed
 item_being_placed = None
@@ -88,7 +87,8 @@ for i in range(number_of_items):
 button_list = []
 button_col = 0
 for i in range(len(place_item_list)):
-    tile_button = button.Button(START_PREGAME_X + (button_col * 120) + 20, START_PREGAME_Y + 150, place_item_list[i], 1, i)
+    tile_button = button.Button(START_PREGAME_X + (button_col * 120) + 20, START_PREGAME_Y + 150, place_item_list[i], 1,
+                                i)
     button_list.append(tile_button)
     button_col += 1
 
@@ -181,13 +181,12 @@ def scaleitem(item, img):
 
 
 def resetround(player1, player2):
-    global isPregameOpen, isItemChosen, isItemsPlaced, isPlayerOneItemPlaced, isPlayerTwoItemPlaced, isRoundOver
+    global isPregameOpen, isItemChosen, isItemsPlaced, isPlayerOneItemPlaced, isPlayerTwoItemPlaced
     isPregameOpen = True
     isItemChosen = False
     isItemsPlaced = False
     isPlayerOneItemPlaced = False
     isPlayerTwoItemPlaced = False
-    isRoundOver = False
 
     player1.reset_player()
     player2.reset_player()
@@ -204,13 +203,6 @@ def game_over(player1, player2):
     screen.blit(game_over_text, game_over_rect)
     screen.blit(player_who_won_text, player_rect)
 
-    # Restart button
-    restart_img = pygame.image.load("imgs/restart.png")
-    restart_button = button.Button((SCREEN_WIDTH // 2) - 75, (SCREEN_HEIGHT // 2) + 200, restart_img, 0.3, 100)
-    # check if restart button is clicked
-    if restart_button.draw(screen):
-        reset_game(player1, player2)
-
 
 def reset_game(player1, player2):
     global world_data, platforms, isGameOver
@@ -219,6 +211,10 @@ def reset_game(player1, player2):
     isGameOver = False
     resetround(player1, player2)
 
+
+# Restart button
+restart_img = pygame.image.load("imgs/restart.png")
+scale = 0.3
 
 clock = pygame.time.Clock()
 
@@ -274,6 +270,11 @@ while run:
         draw_player(racoon, screen)
         draw_player(iguana, screen)
 
+        # check if restart button is clicked
+        restart_button = button.Button(SCREEN_WIDTH - (restart_img.get_width() * scale), SCREEN_HEIGHT - (restart_img.get_height() * scale), restart_img, scale, 100)
+        if restart_button.draw(screen):
+            reset_game(racoon, iguana)
+
         if len(crossbows) > 0:
             for individual_crossbow in crossbows:
                 individual_crossbow.update()
@@ -292,17 +293,17 @@ while run:
                         iguana.dead = True
                         projectile.kill()
 
-        if not racoon.dead:
-            racoon.move(player1_keys, platforms)
         if not iguana.dead:
             iguana.move(player2_keys, platforms)
+        if not racoon.dead:
+            racoon.move(player1_keys, platforms)
 
         if racoon.dead and iguana.dead:
-            isRoundOver = True
+            resetround(racoon, iguana)
 
         if racoon.rect.colliderect(flag):
             isGameOver = True
-                    # Winner, Loser
+            # Winner, Loser
             game_over(racoon, iguana)
             racoon.dead = True
 
@@ -311,8 +312,6 @@ while run:
             game_over(iguana, racoon)
             iguana.dead = True
 
-    if isRoundOver:
-        resetround(racoon, iguana)
 
     clock.tick(60)
     pygame.display.update()
