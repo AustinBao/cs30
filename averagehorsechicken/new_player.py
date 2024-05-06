@@ -28,10 +28,12 @@ class Player(pygame.sprite.Sprite):
     def reset_player(self):
         self.rect.center = (150, 600)
         self.dead = False
+
     def dead_to_border(self):
         #  Check if player touches the bottom of the map
         if self.rect.y + self.img_height > 800:
             self.dead = True
+
     def transform_image(self, img, flip=False):
         img = pygame.transform.flip(img, flip, False)
         scaled_img = pygame.transform.scale(img,
@@ -39,7 +41,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.size = scaled_img.get_size()
         self.rect.center = (self.rect.centerx, self.rect.centery)
         return scaled_img
-
 
 
 
@@ -106,6 +107,7 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping:
             if not self.on_ground:
                 self.rect.y += self.gravity
+        
 
     def move(self, move_keys, platforms):
         keys = pygame.key.get_pressed()
