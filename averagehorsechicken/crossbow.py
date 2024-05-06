@@ -9,7 +9,8 @@ class Crossbow:
         self.projectiles = pygame.sprite.Group()
 
     def shoot(self):
-        projectile = Projectile((self.rect.centerx + 12, self.rect.top))  # Shoot from the top of the crossbow
+        # Shoot from the top of the crossbow; add 12 to center the arrow to the center of the image
+        projectile = Projectile((self.rect.centerx + 12, self.rect.top))
         self.projectiles.add(projectile)
 
     def update(self):

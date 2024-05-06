@@ -1,3 +1,5 @@
+
+
 import pygame
 
 
@@ -8,11 +10,10 @@ class Player(pygame.sprite.Sprite):
         self.name = name
         self.dead = False
         self.scale = 0.08
-        self.on_ground = True
+        self.on_ground = False
         self.jumping = False
-        self.can_jump = True
         self.gravity = 1
-        self.jump_height = 15
+        self.jump_height = -15
         self.y_velocity = self.jump_height
         self.moving_left = False
         self.moving_right = False
@@ -27,7 +28,10 @@ class Player(pygame.sprite.Sprite):
     def reset_player(self):
         self.rect.center = (150, 600)
         self.dead = False
-
+    def dead_to_border(self):
+        #  Check if player touches the bottom of the map
+        if self.rect.y + self.img_height > 800:
+            self.dead = True
     def transform_image(self, img, flip=False):
         img = pygame.transform.flip(img, flip, False)
         scaled_img = pygame.transform.scale(img,
@@ -36,10 +40,18 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.rect.centerx, self.rect.centery)
         return scaled_img
 
+
+
+
+
+
     def check_collisions(self, platforms, dx, dy):
         for platform, platforms_id in platforms:
+            # Horizontal movement
             if platform.colliderect(self.rect.x + dx, self.rect.y, self.img_width, self.img_height):
                 dx = 0
+
+            # Vertical movement
             if platform.colliderect(self.rect.x, self.rect.y + dy, self.img_width, self.img_height):
                 if self.y_velocity < 0:
                     self.y_velocity = 0
@@ -47,7 +59,6 @@ class Player(pygame.sprite.Sprite):
 
                 if self.y_velocity >= 0:
                     self.y_velocity = 0
-                    self.on_ground = True
                     dy = platform.top - self.rect.bottom
 
         self.rect.x += dx
@@ -63,28 +74,11 @@ class Player(pygame.sprite.Sprite):
             dx += 3
             self.moving_right = True
             self.moving_left = False
-        if keys[move_keys['up']] and self.on_ground and self.can_jump:
-            dy -= self.jump_height
+        if keys[move_keys['up']] and self.on_ground:
+            dy += self.jump_height
             self.jumping = True
-            self.can_jump = False
             self.on_ground = False
         self.check_collisions(platforms, dx, dy)
-
-    def check_on_ground(self, platforms):
-        # shift player down slightly to test if it collides with any platform below it
-        self.rect.y += 1
-        on_ground = False
-        for platform, platform_id in platforms:
-            if self.rect.colliderect(platform):
-                # if stepping on these barbwire platforms the player dies
-                if platform_id == 3 or platform_id == 4:
-                    self.dead = True
-                on_ground = True
-                self.can_jump = True
-                break
-        # shift player back to its normal position
-        self.rect.y -= 1
-        return on_ground
 
     def handle_jumping(self):
         # Watched a Youtube tutorial for the jumping logic: https://www.youtube.com/watch?v=ST-Qq3WBZBE&t=325s
@@ -112,12 +106,10 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping:
             if not self.on_ground:
                 self.rect.y += self.gravity
-            if self.rect.y + self.img_height > 800:
-                self.dead = True
 
     def move(self, move_keys, platforms):
         keys = pygame.key.get_pressed()
         self.listen_to_movement(keys, move_keys, platforms)
-        self.on_ground = self.check_on_ground(platforms)
         self.handle_jumping()
+        self.dead_to_border()
         self.apply_gravity()

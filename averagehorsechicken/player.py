@@ -10,6 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.scale = 0.08
         self.on_ground = True
         self.jumping = False
+        self.can_jump = True
         self.gravity = 1
         self.jump_height = 15
         self.y_velocity = self.jump_height
@@ -26,6 +27,7 @@ class Player(pygame.sprite.Sprite):
     def reset_player(self):
         self.rect.center = (150, 600)
         self.dead = False
+
     def transform_image(self, img, flip=False):
         img = pygame.transform.flip(img, flip, False)
         scaled_img = pygame.transform.scale(img,
@@ -34,26 +36,18 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.rect.centerx, self.rect.centery)
         return scaled_img
 
-
-
-
-
-
     def check_collisions(self, platforms, dx, dy):
         for platform, platforms_id in platforms:
-            # Horizontal movement
             if platform.colliderect(self.rect.x + dx, self.rect.y, self.img_width, self.img_height):
                 dx = 0
             if platform.colliderect(self.rect.x, self.rect.y + dy, self.img_width, self.img_height):
                 if self.y_velocity < 0:
                     self.y_velocity = 0
-                    self.jumping = False
                     dy = platform.bottom - self.rect.top
 
                 if self.y_velocity >= 0:
                     self.y_velocity = 0
                     self.on_ground = True
-                    self.jumping = False
                     dy = platform.top - self.rect.bottom
 
         self.rect.x += dx
@@ -69,9 +63,10 @@ class Player(pygame.sprite.Sprite):
             dx += 3
             self.moving_right = True
             self.moving_left = False
-        if keys[move_keys['up']] and self.on_ground:
+        if keys[move_keys['up']] and self.on_ground and self.can_jump:
             dy -= self.jump_height
             self.jumping = True
+            self.can_jump = False
             self.on_ground = False
         self.check_collisions(platforms, dx, dy)
 
@@ -85,6 +80,7 @@ class Player(pygame.sprite.Sprite):
                 if platform_id == 3 or platform_id == 4:
                     self.dead = True
                 on_ground = True
+                self.can_jump = True
                 break
         # shift player back to its normal position
         self.rect.y -= 1
@@ -116,7 +112,6 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping:
             if not self.on_ground:
                 self.rect.y += self.gravity
-            #  Check if player touches the bottom of the map
             if self.rect.y + self.img_height > 800:
                 self.dead = True
 
