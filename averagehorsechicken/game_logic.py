@@ -155,21 +155,17 @@ def placeitem(id, x, y):
     if 0 <= x < SMALL_COLS and 0 <= y < SMALL_ROWS:
         if id == 1 or id == 3:
             for i in range(4):
-                world_data[y - i][x] = id
-                platforms.append(
-                    (pygame.Rect(x * TILE_SIZE_SMALL, (y - i) * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
+                if y - i >= 0:  # Ensure the index is within bounds
+                    world_data[y - i][x] = id
+                    platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, (y - i) * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
         elif id == 0:
-            world_data[y - 1][x] = id
+            world_data[y][x] = id
             new_crossbow = crossbow.Crossbow((x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL))
             crossbows.append(new_crossbow)
-            platforms.append(
-                (pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
+            platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
         else:
             world_data[y][x] = id
-            platforms.append(
-                (pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
-    print(platforms)
-
+            platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL) , id))
 
 def scaleitem(item, img):
     if item == 1 or item == 3:
@@ -293,10 +289,10 @@ while run:
                         iguana.dead = True
                         projectile.kill()
 
-        if not iguana.dead:
-            iguana.move(player2_keys, platforms)
         if not racoon.dead:
             racoon.move(player1_keys, platforms)
+        if not iguana.dead:
+            iguana.move(player2_keys, platforms)
 
         if racoon.dead and iguana.dead:
             resetround(racoon, iguana)
