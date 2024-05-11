@@ -14,6 +14,8 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 2
         self.jump_height = 20
         self.y_velocity = self.jump_height
+        self.moving_right = False
+        self.moving_left = False
         self.original_img = pygame.image.load(f'imgs/characters/{img}.png')
         self.jumping_img = pygame.image.load(f'imgs/characters/{img}_jump.png')
         self.rect = self.original_img.get_rect()
@@ -28,11 +30,22 @@ class Player(pygame.sprite.Sprite):
 
     def transform_image(self, img, flip=False):
         img = pygame.transform.flip(img, flip, False)
-        scaled_img = pygame.transform.scale(img,
-                                            (int(img.get_width() * self.scale), int(img.get_height() * self.scale)))
+        scaled_img = pygame.transform.scale(img,(25, 25))
         self.rect.size = scaled_img.get_size()
         self.rect.center = (self.rect.centerx, self.rect.centery)
         return scaled_img
+
+    def orientation_while_jump(self):
+        if self.moving_left:
+            self.image = self.transform_image(self.jumping_img, True)
+        elif self.moving_right:
+            self.image = self.transform_image(self.jumping_img)
+
+    def orientation_while_grounded(self):
+        if self.moving_left:
+            self.image = self.transform_image(self.original_img, True)
+        elif self.moving_right:
+            self.image = self.transform_image(self.original_img)
 
     def check_collision_x(self, platforms, dx):
         for platform, platform_id in platforms:
@@ -62,8 +75,14 @@ class Player(pygame.sprite.Sprite):
         dx = 0
         if keys[move_keys['left']]:
             dx -= 3
+            self.moving_right = False
+            self.moving_left = True
+            self.image = self.transform_image(self.original_img, True)
         elif keys[move_keys['right']]:
             dx += 3
+            self.moving_right = True
+            self.moving_left = False
+            self.image = self.transform_image(self.original_img)
 
         dx = self.check_collision_x(platforms, dx)
         self.rect.x += dx
@@ -82,12 +101,14 @@ class Player(pygame.sprite.Sprite):
                 self.dead = platform_id in [3, 4]  # Specific platforms cause death
                 on_ground = True
                 self.can_jump = True  # Reset jump capability if on ground
+                self.orientation_while_grounded()
                 break
         self.rect.y -= 1  # Revert test move
         return on_ground
 
     def handle_jumping(self, platforms):
         if self.jumping:
+            self.orientation_while_jump()
             new_y = self.rect.y + self.y_velocity  # Should be adding velocity because it starts negative
             collided = self.check_collision_y(platforms, self.y_velocity)
             if not collided:
