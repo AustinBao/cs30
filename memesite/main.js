@@ -30,7 +30,7 @@ document.getElementById('memeImage').addEventListener('change', function() {
       reader.onload = function(e) {
           var imgElement = document.getElementById('imageDisplay');
           imgElement.src = e.target.result;
-          imgElement.hidden = false; // Make the image visible
+          imgElement.style.visibility = 'visible'; // Make the image visible
       };
 
       reader.readAsDataURL(file); // Convert the file into a data URL

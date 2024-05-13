@@ -37,11 +37,14 @@
 
         <div class="modal-body">
           <form id="memeForm">
-            <img id="imageDisplay" src="#" hidden>
+            <img id="imageDisplay" src="#" class="displayMeme">
+            <label for="memeImage">Choose image: </label>
             <input type="file" id="memeImage" name="memeImage" accept="image/*">
+            <br>
             <input type="text" id="memeDescription" name="memeDescription" placeholder="Two sentence description">
-            <input type="datetime-local" id="memeTime" name="memeTime">
             <input type="text" id="memeSource" name="memeSource" placeholder="Where did you see it?">
+            <input type="datetime-local" id="memeTime" name="memeTime">
+            
             <br>
             <button type="submit">Submit</button>
           </form>
