@@ -1,7 +1,10 @@
+
+/* NOT MY CODE. ATTEMPTING TO UNDERSTAND EACH LINE RIGHT NOW */
 /* https://uiverse.io/andrew-demchenk0/curvy-octopus-54 */
 
+/* " --* " : essentially a variable that mutliple css elements can impliment by using 
+var(--*) */
 .button {
-  --main-focus: #2d8cf0;
   --font-color: #323232;
   --bg-color-sub: #dedede;
   --bg-color: #eee;
