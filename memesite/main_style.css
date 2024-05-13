@@ -5,7 +5,7 @@ header {
   text-align: center;
   padding: 5px 0;
   font-size: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 input{
@@ -30,6 +30,7 @@ input{
   padding: 20px;
   border: 1px solid black;
   width: 60%;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
   
 .close {
@@ -39,8 +40,7 @@ input{
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover {
   color: red;
   text-decoration: none;
   cursor: pointer;
@@ -59,7 +59,7 @@ input{
 }
 
 .modal-footer {
-  padding: 20px 16px 0px;
+  padding: 2px 16px;
   background-color: white;
   color: black;
 }

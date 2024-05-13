@@ -204,7 +204,7 @@ def resetround(player1, player2):
     player2.reset_player()
 
 
-def game_over(player1, player2):
+def game_over(player1):
     draw_bkg()
     # writes the game over text
     game_over_text = font.render("Game Over", True, WHITE)
@@ -218,9 +218,11 @@ def game_over(player1, player2):
 
 
 def reset_game(player1, player2):
-    global world_data, platforms, isGameOver
+    global world_data, platforms, crossbows, isGameOver
     world_data = generate_empty_world_data()
+    # clear lists to remove all platforms and crossbows from before
     platforms = []
+    crossbows = []
     isGameOver = False
     resetround(player1, player2)
 
