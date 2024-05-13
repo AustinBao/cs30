@@ -3,7 +3,8 @@
 #   - There are initially NO tiles for you to stand on (even the spawn area). The point is to make your own path.
 #   - However, your opponent can try to stop your path by obstructing it using tiles.
 #   - If you happen trap yourself and there is no way out, click the restart button in the bottom right.
-
+#
+#                                  ~ HAVE FUN! ~
 
 import pygame
 import os
@@ -19,7 +20,7 @@ SCREEN_HEIGHT = 800
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Average Horse Chicken')
 
-# define colours
+# COLOURS
 GREEN = (144, 201, 120)
 WHITE = (255, 255, 255)
 RED = (200, 25, 25)
@@ -28,13 +29,15 @@ BLUE = (111, 143, 175)
 LIGHTBLUE = (173, 216, 230)
 CARDBOARD = (159, 135, 103)
 
-# define game variables/states
+# GAME STAGES/STATES
 isPregameOpen = True
 isItemChosen = False
 isItemsPlaced = False
 isPlayerOneItemPlaced = False
 isPlayerTwoItemPlaced = False
 isGameOver = False
+
+# GAME VARIABLES
 # Track the item ID currently being placed
 item_being_placed = None
 # True if an item is selected but not placed
@@ -61,15 +64,20 @@ START_PREGAME_Y = (SCREEN_HEIGHT - PREGAME_HEIGHT) // 2
 # Load player and give them their traits(movement keys and name)
 player1_keys = {'left': pygame.K_a, 'right': pygame.K_d, 'up': pygame.K_w, 'down': pygame.K_s}
 player2_keys = {'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
-
 player1_name = "Austin"
 player2_name = "Bob"
-
 racoon = player.Player(player1_name, "rac")
 iguana = player.Player(player2_name, "ig")
 
+# LOAD GENERAL GAME VARIABLES
+# Load background image
 background = pygame.image.load("imgs/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+# Load restart button image
+restart_img = pygame.image.load("imgs/restart.png")
+scale = 0.3
+# Load clock
+clock = pygame.time.Clock()
 
 # place items are all scaled to match the grid
 place_item_list = []
@@ -86,9 +94,9 @@ for i in range(number_of_items):
 # convert imgs into button objects
 button_list = []
 button_col = 0
+# place clickable PreGame items 120 pixels apart by keeping track of the columns
 for i in range(len(place_item_list)):
-    tile_button = button.Button(START_PREGAME_X + (button_col * 120) + 20, START_PREGAME_Y + 150, place_item_list[i], 1,
-                                i)
+    tile_button = button.Button(START_PREGAME_X + (button_col * 120) + 20, START_PREGAME_Y + 150, place_item_list[i], 1, i)
     button_list.append(tile_button)
     button_col += 1
 
@@ -153,21 +161,28 @@ def draw_world():
 
 def placeitem(id, x, y):
     if 0 <= x < SMALL_COLS and 0 <= y < SMALL_ROWS:
+        # checking id since some items/ids are larger than just the 25x25 tiles.
+        # For instance, 1 and 3 are 100 tall therefore we iterate from 0-4 to place the item in the world_data list.
         if id == 1 or id == 3:
             for i in range(4):
-                if y - i >= 0:  # Ensure the index is within bounds
+                # Ensure the index is still within bounds
+                if y - i >= 0:
                     world_data[y - i][x] = id
                     platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, (y - i) * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
+        # 0 is a special id since it is the crossbow. Must treat it differently by instantiating a crossbow object
         elif id == 0:
             world_data[y][x] = id
             new_crossbow = crossbow.Crossbow((x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL))
+            # add the new crossbow to the overall list of crossbows
             crossbows.append(new_crossbow)
             platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL), id))
         else:
+            # every other item is just 25x25 sized so it can fit in one tile.
             world_data[y][x] = id
             platforms.append((pygame.Rect(x * TILE_SIZE_SMALL, y * TILE_SIZE_SMALL, TILE_SIZE_SMALL, TILE_SIZE_SMALL) , id))
 
 def scaleitem(item, img):
+    # scales images when placing them so the player knows what the item will actually look like when placed.
     if item == 1 or item == 3:
         return pygame.transform.scale(img, (TILE_SIZE_SMALL, TILE_SIZE_MAIN))
     elif item == 0:
@@ -177,6 +192,7 @@ def scaleitem(item, img):
 
 
 def resetround(player1, player2):
+    # resets all game stages and players
     global isPregameOpen, isItemChosen, isItemsPlaced, isPlayerOneItemPlaced, isPlayerTwoItemPlaced
     isPregameOpen = True
     isItemChosen = False
@@ -190,6 +206,7 @@ def resetround(player1, player2):
 
 def game_over(player1, player2):
     draw_bkg()
+    # writes the game over text
     game_over_text = font.render("Game Over", True, WHITE)
     player_who_won_text = font.render(f"{player1.name} won!", True, WHITE)
 
@@ -208,21 +225,18 @@ def reset_game(player1, player2):
     resetround(player1, player2)
 
 
-# Restart button
-restart_img = pygame.image.load("imgs/restart.png")
-scale = 0.3
-
-clock = pygame.time.Clock()
-
 run = True
 while run:
+    # mouse position
     pos = pygame.mouse.get_pos()
     x = pos[0] // TILE_SIZE_SMALL
     y = pos[1] // TILE_SIZE_SMALL
 
+    # in all game states/stages the background is always drawn. That's why its on the outside
     draw_bkg()
 
     for event in pygame.event.get():
+        # exits the game
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -233,15 +247,18 @@ while run:
                 item_placement_pending = False
 
                 if len(selected_items) > 0:
+                    # not all items have been placed yet so set item_being_placed to the first item from selected_items
                     item_being_placed = selected_items.pop(0)
                     item_placement_pending = True
                 else:
+                    # all items have been placed
                     isItemChosen = False
                     isItemsPlaced = True
 
     if isPregameOpen:
         draw_pre_game()
         for b in button_list:
+            # if "b" button is pressed, add that id to the selected_items list to keep track of player's items
             if b.draw(screen):
                 selected_items.append(b.id)
                 if len(selected_items) == number_of_players:
@@ -252,16 +269,20 @@ while run:
                     isItemChosen = True
 
     if isItemChosen:
+        # After choosing both player's items in the pregame, display grid for the player to place the items
         draw_smaller_grid()
         draw_main_grid()
         if item_placement_pending:
             img = pygame.image.load(f'imgs/items/{item_being_placed}.png')
+            # scales the item when placing it to fit the 25 sized tiles in the grid
             img = scaleitem(item_being_placed, img)
             img.set_alpha(128)
+            # this way the item being placed is situated on the tip of the cursor
             screen.blit(img, (pos[0] - img.get_width(), pos[1] - img.get_height()))
         draw_world()
 
     if isItemsPlaced:
+        # when both player's items are placed, begin the main game
         draw_world()
         draw_player(racoon, screen)
         draw_player(iguana, screen)
@@ -271,17 +292,21 @@ while run:
         if restart_button.draw(screen):
             reset_game(racoon, iguana)
 
+        # if there are crossbows on level, update their projectiles
         if len(crossbows) > 0:
             for individual_crossbow in crossbows:
                 individual_crossbow.update()
                 individual_crossbow.projectiles.draw(screen)
 
+            # Inefficient; triple nested for loop
             for individual_crossbow in crossbows:
                 for projectile in individual_crossbow.projectiles:
                     for platform_rect, _ in platforms:
                         if platform_rect.colliderect(projectile.rect):
-                            projectile.kill()  # Remove projectile when it hits a platform
+                            # Remove projectile when it hits a platform
+                            projectile.kill()
                             break
+                    #   Checks for collisions between arrows and players
                     if racoon.rect.colliderect(projectile.rect):
                         racoon.dead = True
                         projectile.kill()
@@ -289,26 +314,30 @@ while run:
                         iguana.dead = True
                         projectile.kill()
 
+        # only allow movement if player is not dead
         if not racoon.dead:
             racoon.move(player1_keys, platforms)
         if not iguana.dead:
             iguana.move(player2_keys, platforms)
 
+        # If both players are dead, reset round
         if racoon.dead and iguana.dead:
             resetround(racoon, iguana)
 
+        # If racoon touches the flag first
         if racoon.rect.colliderect(flag):
             isGameOver = True
             # Winner, Loser
             game_over(racoon, iguana)
             racoon.dead = True
 
+        # If iguana touches the flag first
         elif iguana.rect.colliderect(flag):
             isGameOver = True
             game_over(iguana, racoon)
             iguana.dead = True
 
-
+    # keeps the fps at 60
     clock.tick(60)
     pygame.display.update()
 
