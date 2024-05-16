@@ -1,9 +1,12 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import flash, Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
+import os
+
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+app.secret_key = os.urandom(12)
 client = MongoClient("mongodb+srv://austin:slimecheese123@memesite.qustpit.mongodb.net/?retryWrites=true&w=majority&appName=Memesite")
 app.db = client.memesite
  
@@ -44,10 +47,12 @@ def login():
         user = app.db.users.find_one({"name": name})
         
         if user and check_password_hash(user['password'], password):
+            flash('Successfully logged in!')
             return redirect(url_for('home'))
         else:
-            return 'Invalid username or password'
-        
+            flash('Invalid username or password')
+            flash('get better bud')
+            
     return render_template('login.html')
 
 

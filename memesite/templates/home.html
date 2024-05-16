@@ -1,6 +1,10 @@
+<!-- WHEN FLASK ISNT IN THE SAME DIRECTORY -->
+<!-- https://stackoverflow.com/questions/58675081/why-does-running-flask-run-on-windows-result-in-flask-is-not-recognized-as-an -->
+
 {% extends "base.html" %}
 
 {% block extra_css %}
+<script src="add_meme.js"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/button_style.css') }}">
 {% endblock %}
 
