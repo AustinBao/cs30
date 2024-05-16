@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- add css on different html files -->
+    {% block extra_css %}{% endblock %}
+    <title>Memesite</title>
+</head>
+
+<header>
+    <h1>THIS IS THE BASE.</h1>
+
+    <a href="/signup">SIGNUP</a> 
+    <a href="/login">LOGIN</a> 
+    <a href="/">HOME</a>    
+</header>
+
+<body> 
+    {% block content %}
+        <!-- template inserted here -->
+    {% endblock %}
+</body>
+</html>

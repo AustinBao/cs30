@@ -36,9 +36,7 @@ var(--*) */
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;
-  align-items: center; 
-  height: 70vh; 
+  padding-bottom: 20px;
 }
 
 .button .button__icon {
@@ -66,7 +64,7 @@ var(--*) */
 }
 
 .button:hover .button__icon {
-  width: 148px;
+  width: 140px;
   transform: translateX(0);
 }
 
