@@ -6,6 +6,8 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/button_style.css') }}" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script defer src="{{ url_for('static', filename='js/edit_meme.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -44,11 +46,14 @@
     {% for meme in memes %}
       <div class="card">
         <div class="card2">
-          <img src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" alt="Image of Meme">
+          <img src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" height="140px" alt="Image of Meme">
           <h3>Name: {{ meme[1] }}</h3> 
           <p>Short description: {{ meme[2] }}</p> 
           <p>Year seen: {{ meme[3] }}</p> 
           <p>From where? : {{ meme[4] }}</p> 
+          <p>ID: {{ meme[5] }} </p>
+          <i data-id="{{ meme[5] }}" style="font-size:24px"class="fa"  onclick="deleteMeme()">&#xf014;</i>
+          <i style="font-size:24px" class="fa"  onclick="editMeme()">&#xf040;</i>
         </div>
       </div>   
     {% endfor %}

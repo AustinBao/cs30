@@ -2,6 +2,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import flash, Flask, render_template, request, redirect, url_for, session
 from pymongo import MongoClient
 import os
+import datetime
 
 
 app = Flask(__name__)
@@ -32,6 +33,14 @@ class Meme:
             'user_id': session['user_id']
         }
         app.db.memes.insert_one(meme_data)
+
+    def last_seen(self):
+        current_year = datetime.date.today().year
+        return current_year - self.year
+    
+    def delete_meme(self, meme_id):
+        app.db.memes.deleteOne({"_id" : meme_id})
+        return redirect(url_for('home'))
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -66,7 +75,8 @@ def home():
             meme["name"],
             meme["description"],
             meme["year"],
-            meme["source"]
+            meme["source"],
+            meme["_id"]
         )
         for meme in app.db.memes.find({"user_id": user_id})
     ]
