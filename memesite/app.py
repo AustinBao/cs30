@@ -1,20 +1,22 @@
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import flash, Flask, render_template, request, redirect, url_for, session, jsonify
-from pymongo import MongoClient
 import os
 import datetime
+from pymongo import MongoClient
 from bson.objectid import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, flash, render_template, jsonify, redirect, url_for, session, request
 
 
 # Different flask http methods: https://www.geeksforgeeks.org/flask-http-method/
 
 app = Flask(__name__)
+# for some reason it is never in debug mode
 app.config['DEBUG'] = True
 app.config['UPLOAD_FOLDER'] = './static/meme_imgs/'
 app.secret_key = os.urandom(12)
 client = MongoClient("mongodb+srv://austin:slimecheese123@memesite.qustpit.mongodb.net/?retryWrites=true&w=majority&appName=Memesite")
 app.db = client.memesite
 
+# creates local storage for images if not already present
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
@@ -51,11 +53,20 @@ class Meme:
         }
         # delete past image when edited
         old_meme = app.db.memes.find_one({'_id': ObjectId(meme_id)})
-        if os.path.exists(f"/meme_imgs/{old_meme["image_name"]}"):
-            os.remove(f"/meme_imgs/{old_meme["image_name"]}")
-        
-        app.db.memes.update_one({'_id': ObjectId(meme_id)}, {'$set': updated_meme})
-        return "success" 
+        file_path = f"./static/meme_imgs/{old_meme['image_name']}"
+
+        print(f"Attempting to delete: {file_path}")
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+                print(f"File {file_path} deleted successfully.")
+            except Exception as e:
+                print(f"Error deleting file: {e}")
+        else:
+            print("File does not exist.")
+        # update database
+        result = app.db.memes.update_one({'_id': ObjectId(meme_id)}, {'$set': updated_meme})
+        return result
 
 
 @app.route("/", methods=['GET', 'POST', 'PUT'])
@@ -169,13 +180,15 @@ def edit_meme(meme_id):
         edit_source
     )
 
-    meme.update_in_db(meme_id)
-
-    return redirect(url_for('home'))    
-
+    success = meme.update_in_db(meme_id)
+    # make sure to always return something in json format (stuck on this error for a long time)
+    if success:
+        return jsonify({'message': 'Meme edited successfully'}), 200
+    else:
+        return jsonify({'message': 'Meme not found'}), 404
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
  
