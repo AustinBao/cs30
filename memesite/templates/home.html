@@ -1,5 +1,3 @@
-<!-- WHEN FLASK ISNT IN THE SAME DIRECTORY -->
-<!-- https://stackoverflow.com/questions/58675081/why-does-running-flask-run-on-windows-result-in-flask-is-not-recognized-as-an -->
 
 {% extends "base.html" %}
 
@@ -22,12 +20,12 @@
   <div id="memeModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="close">&times;</span>
+        <span id="addClose" class="close">&times;</span>
         <h2>Add Meme</h2>
         <p>fill out some information</p>
       </div>
       <div class="modal-body">
-        <form id="memeForm" method="POST" enctype="multipart/form-data" action="/">
+        <form id="addMemeForm" method="POST" enctype="multipart/form-data" action="/">
           <img id="imageDisplay" src="#" hidden>
           <input type="file" id="memeImage" name="memeImage" accept="image/*" required>
           <input type="text" id="memeName" name="memeName" placeholder="Name of the meme" required>
@@ -35,7 +33,29 @@
           <input type="number" id="memeYear" name="memeYear" required>
           <input type="text" id="memeSource" name="memeSource" placeholder="Where did you see it?" required>
 
-          <button type="submit">Submit</button>
+          <button type="submit" >Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="editMemeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="editClose" class="close">&times;</span>
+        <h2>Edit Meme</h2>
+      </div>
+      <div class="modal-body">
+        <form id="editMemeForm" enctype="multipart/form-data">
+          <img id="imageDisplay" src="#" hidden>
+          <input type="file" id="editImage" name="editImage" accept="image/*" required>
+          <input type="text" id="editName" name="editName" placeholder="Name of the meme" required>
+          <input type="text" id="editDescription" name="editDescription" placeholder="Two sentence description" required>
+          <input type="number" id="editYear" name="editYear" required>
+          <input type="text" id="editSource" name="editSource" placeholder="Where did you see it?" required>
+
+          <button type="submit" >Submit</button>
         </form>
       </div>
     </div>
@@ -46,15 +66,33 @@
     {% for meme in memes %}
       <div class="card">
         <div class="card2">
+
           <img src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" height="140px" alt="Image of Meme">
-          <h3>Name: {{ meme[1] }}</h3> 
-          <p>Short description: {{ meme[2] }}</p> 
-          <p>Year seen: {{ meme[3] }}</p> 
-          <p>From where? : {{ meme[4] }}</p> 
-          <p>ID: {{ meme[5] }} </p>
-          <i data-id="{{ meme[5] }}" style="font-size:24px"class="fa"  onclick="deleteMeme()">&#xf014;</i>
-          <i style="font-size:24px" class="fa"  onclick="editMeme()">&#xf040;</i>
+
+          <div class="meme-info">
+            <label>Name:</label> <span class="meme-name">{{ meme[1] }}</span>
+          </div>
+
+          <div class="meme-info">
+            <label>Short description:</label> <span class="meme-description">{{ meme[2] }}</span>
+          </div>
+
+          <div class="meme-info">
+            <label>Year seen:</label> <span class="meme-year">{{ meme[3] }}</span>
+          </div>
+
+          <div class="meme-info">
+            <label>From where?:</label> <span class="meme-source">{{ meme[4] }}</span>
+          </div>
+
+          <div class="meme-info">
+            <label>ID:</label> <span class="meme-id">{{ meme[5] }}</span>
+          </div>
+          
+          <i data-id="{{ meme[5] }}" style="font-size:24px" class="fa trash">&#xf014;</i>
+          <i data-id="{{ meme[5] }}" style="font-size:24px" class="fa edit">&#xf040;</i>
         </div>
+
       </div>   
     {% endfor %}
   </div>

@@ -1,9 +1,12 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import flash, Flask, render_template, request, redirect, url_for, session
+from flask import flash, Flask, render_template, request, redirect, url_for, session, jsonify
 from pymongo import MongoClient
 import os
 import datetime
+from bson.objectid import ObjectId
 
+
+# Different flask http methods: https://www.geeksforgeeks.org/flask-http-method/
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -16,8 +19,8 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 class Meme:
-    def __init__(self, image_path, name, description, year, source):
-        self.image_path = image_path
+    def __init__(self, image_name, name, description, year, source):
+        self.image_name = image_name
         self.name = name
         self.description = description
         self.year = year
@@ -25,7 +28,7 @@ class Meme:
 
     def save_to_db(self):
         meme_data = {
-            'image_path': self.image_path,
+            'image_name': self.image_name,
             'name': self.name,
             'description': self.description,
             'year': self.year,
@@ -38,12 +41,24 @@ class Meme:
         current_year = datetime.date.today().year
         return current_year - self.year
     
-    def delete_meme(self, meme_id):
-        app.db.memes.deleteOne({"_id" : meme_id})
-        return redirect(url_for('home'))
+    def update_in_db(self, meme_id):
+        updated_meme = {
+            'image_name': self.image_name,
+            'name': self.name,
+            'description': self.description,
+            'year': self.year,
+            'source': self.source 
+        }
+        # delete past image when edited
+        old_meme = app.db.memes.find_one({'_id': ObjectId(meme_id)})
+        if os.path.exists(f"/meme_imgs/{old_meme["image_name"]}"):
+            os.remove(f"/meme_imgs/{old_meme["image_name"]}")
+        
+        app.db.memes.update_one({'_id': ObjectId(meme_id)}, {'$set': updated_meme})
+        return "success" 
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST', 'PUT'])
 def home():
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -56,11 +71,11 @@ def home():
             img_file.save(filepath)
 
             meme = Meme(
-                image_path=filename,
-                name=request.form.get('memeName'),
-                description=request.form.get('memeDescription'),
-                year=request.form.get('memeYear'),
-                source=request.form.get('memeSource')
+                filename,
+                request.form.get('memeName'),
+                request.form.get('memeDescription'),
+                request.form.get('memeYear'),
+                request.form.get('memeSource')
             )
             meme.save_to_db()
             return redirect(url_for('home'))
@@ -71,7 +86,7 @@ def home():
     user_id = session['user_id']
     memes = [
         (
-            meme["image_path"],
+            meme["image_name"],
             meme["name"],
             meme["description"],
             meme["year"],
@@ -116,12 +131,51 @@ def login():
             
     return render_template('login.html')
 
+
 @app.route('/logout/')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+# FLask takes the URL parameter (<meme_id>) and automatically passes it to the "delete_meme" function as the "meme_id" argument
+@app.route('/delete_meme/<meme_id>', methods=['DELETE'])
+def delete_meme(meme_id):
+    success = app.db.memes.delete_one({'_id': ObjectId(meme_id)})
+    if success:
+        return jsonify({'message': 'Meme deleted successfully'}), 200
+    else:
+        return jsonify({'message': 'Meme not found'}), 404
+    
+
+@app.route('/edit_meme/<meme_id>', methods=['PUT'])
+def edit_meme(meme_id):
+    edit_image = request.files.get('editImage')
+    edit_name = request.form.get('editName')
+    edit_description = request.form.get('editDescription')
+    edit_year = request.form.get('editYear')
+    edit_source = request.form.get('editSource')
+
+    # Handle file upload
+    if edit_image:
+        filename = edit_image.filename
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        edit_image.save(filepath)
+
+    meme = Meme(
+        filename,
+        edit_name,
+        edit_description,
+        edit_year,
+        edit_source
+    )
+
+    meme.update_in_db(meme_id)
+
+    return redirect(url_for('home'))    
+
+
 
 if __name__ == '__main__':
     app.run()
 
+ 
