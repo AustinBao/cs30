@@ -1,13 +1,26 @@
 {% extends "base.html" %}
 
+
+{% block extra_files %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signupandin.css') }}" >
+{% endblock %}
+
+
 {% block content %}
     
     <h2>Sign up</h2>
     <form method="post">
-        Username: <input type="text" name="username" required><br>
-        Email: <input type="text" name="email" required><br>
-        Password: <input type="password" name="password" required><br>
+        <div class="input-group">
+            <label class="label">Username</label>
+            <input autocomplete="off" name="username" id="username" class="input" type="text" required> 
+            <label class="label">Password</label>
+            <input autocomplete="off" name="password" id="password" class="input" type="password" required>
+            <label class="label">Email address</label>
+            <input autocomplete="off" name="email" id="email" class="input" type="email" required>    
+        </div>
         <button type="submit">Sign up</button>
     </form>
+
+    
 
 {% endblock %}

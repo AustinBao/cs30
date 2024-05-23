@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
+
+{% block extra_files %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signupandin.css') }}" >
+{% endblock %}
+
+
 {% block content %}
     
     <h2>Login</h2>
     <form method="post">
-        Username: <input type="text" name="username" required><br>
-        Password: <input type="password" name="password" required><br>
+        <div class="input-group">
+            <label class="label">Username</label>
+            <input autocomplete="off" name="username" id="username" type="text" required> 
+            <label class="label">Password</label>
+            <input autocomplete="off" name="password" id="password" type="password" required>
+        </div>
         <button type="submit">Login</button>
     </form>
-
+    
+    
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <p>{{ messages[0] }}</p>

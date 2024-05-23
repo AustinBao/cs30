@@ -151,6 +151,9 @@ def logout():
 
 @app.route('/friends/', methods=['GET'])
 def friends():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     friend_memes = []
     status = ""
     

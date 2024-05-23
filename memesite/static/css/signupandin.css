@@ -1,0 +1,51 @@
+:root {
+    --background: #05060f0a;
+    --inputlabel: #05060f99;
+    --highlight: #05060fc2;
+}
+
+input {
+    max-width: 300px;
+    height: 40px;
+    background-color: var(--background);
+    border-radius: .5rem;
+    padding: 0 1rem;
+    border: 2px solid transparent;
+    font-size: 1rem;
+}
+  
+.label {
+    margin-top: 20px;
+    display: block;
+    margin-bottom: .3rem;
+    font-size: .9rem;
+    font-weight: bold;
+    color: var(--inputlabel);
+}
+
+.input:hover, .input:focus, .input-group:hover .input {
+    outline: none;
+    border-color: var(--highlight);
+}
+
+.input-group:hover .label, .input:focus {
+    color: var(--highlight);   
+}
+
+button {
+    margin-top: 20px;
+    color: var(--inputlabel);
+    padding: 0.7em 1.7em;
+    font-size: 18px;
+    border-radius: 0.5em;
+    background: var(--background);
+    cursor: pointer;
+    border: 0px;
+    transition: all 0.3s;
+}
+  
+button:active {
+    color: var(--highlight);
+    box-shadow: inset 4px 4px 12px var(--background), inset -4px -4px 12px var(--background);
+}
+  
