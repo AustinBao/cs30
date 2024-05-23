@@ -103,9 +103,7 @@ function editMeme(iconElement) {
           console.error("Failed to edit meme:", data);
         }
       })
-      .catch(error => {
-        console.error("Error:", error);
-      });
+      .catch(error => console.log(error))
     };
   }
 }

@@ -4,6 +4,7 @@
 
 /* " --* " : essentially a variable that mutliple css elements can impliment by using 
 var(--*) */
+
 .button {
   --font-color: #323232;
   --bg-color-sub: #dedede;
@@ -33,10 +34,11 @@ var(--*) */
 }
 
 .button_container {
-  margin: 0;
-  padding: 0;
+  margin: auto;
   display: flex;
-  padding-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
 .button .button__icon {
