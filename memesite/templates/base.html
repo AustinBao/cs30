@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
     <!-- add css on different html files -->
     {% block extra_files %}{% endblock %}
@@ -11,18 +11,17 @@
 </head>
 
 <header>
-    <h1>THIS IS THE BASE.</h1>
+    <h1>MEMESITE</h1>
     <a href="/signup">SIGNUP</a> 
     <a href="/login">LOGIN</a> 
     <a href="/">HOME</a>   
     <a href="/logout">LOGOUT</a>
-    <a href="/friends">FRIEND'S MEMES</a>  
+    <a href="/friends">FRIENDS</a>  
 </header>
 
 <body> 
     {% block content %}
         <!-- template inserted here -->
     {% endblock %}
-
 </body>
 </html>

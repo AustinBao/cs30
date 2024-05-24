@@ -3,28 +3,30 @@
 
 {% block extra_files %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/signupandin.css') }}" >
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" >
 {% endblock %}
 
 
 {% block content %}
-    
-    <h2>Login</h2>
-    <form method="post">
-        <div class="input-group">
-            <label class="label">Username</label>
-            <input autocomplete="off" name="username" id="username" type="text" required> 
-            <label class="label">Password</label>
-            <input autocomplete="off" name="password" id="password" type="password" required>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-    
-    
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <p>{{ messages[0] }}</p>
-            <a href="https://www.chess.com/home">{{ messages[1] }}</a>     
-        {% endif %}
-    {% endwith %}
+    <div class="backgroundforms">
+        <div class="centerform">
+            <form method="post">
+                <div class="input-group">
+                    <h2>Login</h2>
+                    <label class="label">Username</label>
+                    <input autocomplete="off" name="username" id="username" type="text" required> 
+                    <label class="label">Password</label>
+                    <input autocomplete="off" name="password" id="password" type="password" required>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <p>{{ messages[0] }}</p>
+                            <a href="https://www.chess.com/home">{{ messages[1] }}</a>     
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>  
+    </div>
 
 {% endblock %}

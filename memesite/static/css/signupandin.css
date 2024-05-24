@@ -4,6 +4,21 @@
     --highlight: #05060fc2;
 }
 
+.backgroundforms {
+    width: 300px;
+    height: 400px;
+    padding: 50px;
+    margin: 25px auto;
+    border-radius: 20px;
+    background-color: #fff;
+}
+
+.centerform {
+    display: flex;
+    justify-content: center; 
+    align-items: center;   
+}
+
 input {
     max-width: 300px;
     height: 40px;
