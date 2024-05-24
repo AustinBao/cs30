@@ -11,31 +11,34 @@
 
 {% block content %}
   
-  <div class="button_container">
-    <button class="button" type="button" id="add_meme">
-      <span class="button__text">Add Meme</span>
-      <span class="button__icon"><svg class="svg" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg></span>
+  <div class="buttonContainer">
+    <button class="addMemeButton" type="button" id="add_meme">
+      <span class="buttonText">Add Meme</span>
+      <span class="buttonIcon"><svg class="svg" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg></span>
     </button>
   </div>
   
 
   <div id="memeModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modalContent">
+      <div class="modalHeader">
         <span id="addClose" class="close">&times;</span>
         <h2>Add Meme</h2>
         <p>fill out some information</p>
       </div>
-      <div class="modal-body">
-        <form id="addMemeForm" method="POST" enctype="multipart/form-data" action="/">
-          <img id="imageDisplay" src="#" hidden>
-          <input type="file" id="memeImage" name="memeImage" accept="image/*" required>
-          <input type="text" id="memeName" name="memeName" placeholder="Name of the meme" required>
-          <input type="text" id="memeDescription" name="memeDescription" placeholder="Two sentence description" required>
-          <input type="number" id="memeYear" name="memeYear" required>
-          <input type="text" id="memeSource" name="memeSource" placeholder="Where did you see it?" required>
-
-          <button type="submit" >Submit</button>
+      <div class="modalBody">
+        <form id="addMemeForm" class="mainFormBody" method="POST" enctype="multipart/form-data" action="/">
+          
+          <div class="memeFormInfo">
+            <img id="imageDisplay" class="imageDisplay" src="#" hidden>
+            <input type="file" id="memeImage" name="memeImage" accept="image/*" required>
+            <input type="text" id="memeName" name="memeName" placeholder="Name of the meme" required>
+            <input type="text" id="memeDescription" name="memeDescription" placeholder="Two sentence description" required>
+            <input type="number" id="memeYear" name="memeYear" required>
+            <input type="text" id="memeSource" name="memeSource" placeholder="Where did you see it?" required>
+            <button type="submit" >Submit</button>
+          </div> 
+          
         </form>
       </div>
     </div>
@@ -43,21 +46,24 @@
 
 
   <div id="editMemeModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modalContent">
+      <div class="modalHeader">
         <span id="editClose" class="close">&times;</span>
         <h2>Edit Meme</h2>
       </div>
-      <div class="modal-body">
+      <div class="modalBody">
         <form id="editMemeForm" enctype="multipart/form-data">
-          <img id="imageDisplay" src="#" hidden>
-          <input type="file" id="editImage" name="editImage" accept="image/*" required>
-          <input type="text" id="editName" name="editName" placeholder="Name of the meme" required>
-          <input type="text" id="editDescription" name="editDescription" placeholder="Two sentence description" required>
-          <input type="number" id="editYear" name="editYear" required>
-          <input type="text" id="editSource" name="editSource" placeholder="Where did you see it?" required>
 
-          <button type="submit" >Submit</button>
+          <div class="memeFormInfo">
+              <img id="imageDisplay" class="imageDisplay" src="#" hidden>
+              <input type="file" id="editImage" name="editImage" accept="image/*" required>
+              <input type="text" id="editName" name="editName" placeholder="Name of the meme" required>
+              <input type="text" id="editDescription" name="editDescription" placeholder="Two sentence description" required>
+              <input type="number" id="editYear" name="editYear" required>
+              <input type="text" id="editSource" name="editSource" placeholder="Where did you see it?" required>
+              <button type="submit" >Submit</button>
+          </div>
+
         </form>
       </div>
     </div>
@@ -69,22 +75,22 @@
       <div class="card">
         <div class="card2">
 
-          <img class="meme-img" src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" height="140px" alt="Image of Meme">
+          <img class="memeImg" src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" height="140px" alt="Image of Meme">
 
-          <div class="meme-info">
-            <span class="meme-name">{{ meme[1] }}</span>
+          <div class="memeInfo">
+            <span class="memeName">{{ meme[1] }}</span>
           </div>
 
-          <div class="meme-info">
-            <span class="meme-description">{{ meme[2] }}</span>
+          <div class="memeInfo">
+            <span class="memeDescription">{{ meme[2] }}</span>
           </div>
 
-          <div class="meme-info">
-           <span class="meme-year">{{ meme[3] }}</span>
+          <div class="memeInfo">
+           <span class="memeYear">{{ meme[3] }}</span>
           </div>
 
-          <div class="meme-info">
-           <span class="meme-source">{{ meme[4] }}</span>
+          <div class="memeInfo">
+           <span class="memeSource">{{ meme[4] }}</span>
           </div>
 
           <i data-id="{{ meme[5] }}" style="font-size:24px" class="fa trash">&#xf014;</i>

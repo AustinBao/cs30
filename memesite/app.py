@@ -1,3 +1,6 @@
+# HOW TO RUN
+# python -m flask run 
+
 import os
 import datetime
 from pymongo import MongoClient

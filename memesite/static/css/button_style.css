@@ -5,11 +5,14 @@
 /* " --* " : essentially a variable that mutliple css elements can impliment by using 
 var(--*) */
 
-.button {
+:root {
   --font-color: #323232;
   --bg-color-sub: #dedede;
   --bg-color: #eee;
   --main-color: #323232;
+}
+
+.addMemeButton {
   position: relative;
   width: 150px;
   height: 40px;
@@ -23,17 +26,17 @@ var(--*) */
   overflow: hidden;
 }
 
-.button, .button__icon, .button__text {
+.addMemeButton, .buttonIcon, .buttonText {
   transition: all 0.3s;
 }
 
-.button .button__text {
+.addMemeButton .buttonText {
   transform: translateX(22px);
   color: var(--font-color);
   font-weight: 600;
 }
 
-.button_container {
+.buttonContainer {
   margin: 40px;
   display: flex;
   justify-content: center;
@@ -41,7 +44,7 @@ var(--*) */
   padding: 10px;
 }
 
-.button .button__icon {
+.addMemeButton .buttonIcon {
   position: absolute;
   transform: translateX(104px);
   height: 100%;
@@ -52,25 +55,25 @@ var(--*) */
   justify-content: center;
 }
 
-.button .svg {
+.addMemeButton .svg {
   width: 20px;
   fill: var(--main-color);
 }
 
-.button:hover {
+.addMemeButton:hover {
   background: var(--bg-color);
 }
 
-.button:hover .button__text {
+.addMemeButton:hover .buttonText {
   color: transparent;
 }
 
-.button:hover .button__icon {
+.addMemeButton:hover .buttonIcon {
   width: 140px;
   transform: translateX(0);
 }
 
-.button:active {
+.addMemeButton:active {
   transform: translate(3px, 3px);
   box-shadow: 0px 0px var(--main-color);
 }
