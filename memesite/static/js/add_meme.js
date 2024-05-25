@@ -22,6 +22,7 @@ window.onclick = function(event) {
 }
 
 
+// Updates the img when adding a meme
 document.getElementById('memeImage').addEventListener('change', function() {
   let file = this.files[0]; // Get the selected file
   if (file) {
@@ -35,3 +36,5 @@ document.getElementById('memeImage').addEventListener('change', function() {
       reader.readAsDataURL(file); // Convert the file into a data URL
   }
 });
+
+

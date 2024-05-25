@@ -78,16 +78,16 @@ body {
 }
 
 .imageDisplay {
-  max-width: 80%;  
+  max-width: 300px;  
   max-height: 300px;  
-  display: block; 
 }
 
 .memeFormInfo {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: flex-start; 
+  align-items: center; 
+  gap: 20px;
 }
 
 

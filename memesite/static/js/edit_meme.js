@@ -63,7 +63,7 @@ function editMeme(iconElement) {
         let reader = new FileReader();
 
         reader.onload = function(e) {
-          let imgElement = document.getElementById('imageDisplay');
+          let imgElement = document.getElementById('editImageDisplay');
           imgElement.src = e.target.result;
           imgElement.hidden = false;
         };
@@ -71,10 +71,10 @@ function editMeme(iconElement) {
       }
     });
 
-    let name = card.querySelector(".meme-name");
-    let description = card.querySelector(".meme-description");
-    let year = card.querySelector(".meme-year");
-    let source = card.querySelector(".meme-source");
+    let name = card.querySelector(".memeName");
+    let description = card.querySelector(".memeDescription");
+    let year = card.querySelector(".memeYear");
+    let source = card.querySelector(".memeSource");
 
     let currentName = name.textContent;
     let currentDescription = description.textContent;

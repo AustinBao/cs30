@@ -25,6 +25,7 @@
         <span id="addClose" class="close">&times;</span>
         <h2>Add Meme</h2>
         <p>fill out some information</p>
+        <hr>
       </div>
       <div class="modalBody">
         <form id="addMemeForm" class="mainFormBody" method="POST" enctype="multipart/form-data" action="/">
@@ -32,10 +33,10 @@
           <div class="memeFormInfo">
             <img id="imageDisplay" class="imageDisplay" src="#" hidden>
             <input type="file" id="memeImage" name="memeImage" accept="image/*" required>
-            <input type="text" id="memeName" name="memeName" placeholder="Name of the meme" required>
-            <input type="text" id="memeDescription" name="memeDescription" placeholder="Two sentence description" required>
-            <input type="number" id="memeYear" name="memeYear" required>
-            <input type="text" id="memeSource" name="memeSource" placeholder="Where did you see it?" required>
+            <input type="text" id="memeName" name="memeName" placeholder="Name" required>
+            <input type="text" id="memeDescription" name="memeDescription" placeholder="Description" required>
+            <input type="number" id="memeYear" name="memeYear" placeholder="When?" required>
+            <input type="text" id="memeSource" name="memeSource" placeholder="Where?" required>
             <button type="submit" >Submit</button>
           </div> 
           
@@ -50,17 +51,19 @@
       <div class="modalHeader">
         <span id="editClose" class="close">&times;</span>
         <h2>Edit Meme</h2>
+        <p>Change meme's content</p>
+        <hr>
       </div>
       <div class="modalBody">
         <form id="editMemeForm" enctype="multipart/form-data">
 
           <div class="memeFormInfo">
-              <img id="imageDisplay" class="imageDisplay" src="#" hidden>
+              <img id="editImageDisplay" class="imageDisplay" src="#" hidden>
               <input type="file" id="editImage" name="editImage" accept="image/*" required>
-              <input type="text" id="editName" name="editName" placeholder="Name of the meme" required>
-              <input type="text" id="editDescription" name="editDescription" placeholder="Two sentence description" required>
-              <input type="number" id="editYear" name="editYear" required>
-              <input type="text" id="editSource" name="editSource" placeholder="Where did you see it?" required>
+              <input type="text" id="editName" name="editName" placeholder="Name" required>
+              <input type="text" id="editDescription" name="editDescription" placeholder="Description" required>
+              <input type="number" id="editYear" name="editYear"  placeholder="When?" required>
+              <input type="text" id="editSource" name="editSource" placeholder="Where?" required>
               <button type="submit" >Submit</button>
           </div>
 
