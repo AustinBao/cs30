@@ -162,18 +162,21 @@ def friends():
     
     # https://www.geeksforgeeks.org/using-request-args-for-a-variable-url-in-flask/
     friend_username = str(request.args.get("username"))
-    friend = app.db.users.find_one({"username": friend_username})
     
-    if session['user_name'] == friend_username:
-        status = "Cannot search for yourself"
-    elif friend:
-        status = "Found friend in database"
-        # IMPORTANT: wrap with str() since _id isn't originally a str object for some reason
-        friend_id = str(friend["_id"])
-        for meme in app.db.memes.find({"user_id": friend_id}):
-            friend_memes.append((meme["image_name"], meme["name"], meme["description"], meme["year"], meme["source"], meme["_id"]))
-    else:
-        status = "Cannot find friend in database"
+    # checks for None for first visit of the page. This way status doesnt immediatly say "cannot find friend in db" 
+    if friend_username != "None":
+        friend = app.db.users.find_one({"username": friend_username})
+        
+        if session['user_name'] == friend_username:
+            status = "Cannot search for yourself"
+        elif friend:
+            status = "Found friend in database"
+            # IMPORTANT: wrap with str() since _id isn't originally a str object for some reason
+            friend_id = str(friend["_id"])
+            for meme in app.db.memes.find({"user_id": friend_id}):
+                friend_memes.append((meme["image_name"], meme["name"], meme["description"], meme["year"], meme["source"], meme["_id"]))
+        else:
+            status = "Cannot find friend in database"
 
     return render_template('friends.html', status=status, friend_memes=friend_memes)
         

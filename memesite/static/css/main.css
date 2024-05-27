@@ -26,6 +26,8 @@ body {
 .center {
   margin: auto;
   text-align: center;
+  margin-top: 20px;
+  margin-bottom: 25px;
 }
 
 

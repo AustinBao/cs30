@@ -6,6 +6,8 @@ friend_input.addEventListener("keydown",  function(event) {
     }
 });
 
+
+
 function send_username() {
     // get value of input
     let username = friend_input.value;

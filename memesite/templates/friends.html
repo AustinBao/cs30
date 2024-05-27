@@ -16,41 +16,37 @@
       <path d="M46.599 46.599a4.498 4.498 0 0 1-6.363 0l-7.941-7.941C29.028 40.749 25.167 42 21 42 9.402 42 0 32.598 0 21S9.402 0 21 0s21 9.402 21 21c0 4.167-1.251 8.028-3.342 11.295l7.941 7.941a4.498 4.498 0 0 1 0 6.363zM21 6C12.717 6 6 12.714 6 21s6.717 15 15 15c8.286 0 15-6.714 15-15S29.286 6 21 6z">
       </path>
     </svg>
-    <input class="inputBox" id="friends_search" type="text" placeholder="Search For Friends">
+    <input class="inputBox" id="friends_search" type="text" autocomplete="off" placeholder="Search For Friends">
   </div>
 
-  <p class="center">{{ status }}</p>
-
-  <h1 class="center">FRIEND'S MEMES</h1>
+  {% if status %}
+    <h5 id="status" class="center">{{ status }}</h5>
+  {% endif %}
 
   <div class="memeContainer">
     {% for meme in friend_memes %}
       <div class="card">
         <div class="card2">
 
-          <img src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" height="140px" alt="Image of Meme">
+          <img class="memeImg" src="{{ url_for('static', filename='meme_imgs/' ~ meme[0]) }}" width="140px" height="140px" alt="Image of Meme">
 
-          <div class="meme-info">
-            <label>Name:</label> <span class="meme-name">{{ meme[1] }}</span>
+          <div class="memeInfo">
+            <span class="memeName">{{ meme[1] }}</span>
           </div>
 
-          <div class="meme-info">
-            <label>Short description:</label> <span class="meme-description">{{ meme[2] }}</span>
+          <div class="memeInfo">
+            <span class="memeDescription">{{ meme[2] }}</span>
           </div>
 
-          <div class="meme-info">
-            <label>Year seen:</label> <span class="meme-year">{{ meme[3] }}</span>
+          <div class="memeInfo">
+           <span class="memeYear">{{ meme[3] }}</span>
           </div>
 
-          <div class="meme-info">
-            <label>From where?:</label> <span class="meme-source">{{ meme[4] }}</span>
+          <div class="memeInfo">
+           <span class="memeSource">{{ meme[4] }}</span>
           </div>
-
-          <div class="meme-info">
-            <label>ID:</label> <span class="meme-id">{{ meme[5] }}</span>
-          </div>
-      
         </div>
+
       </div>   
     {% endfor %}
   </div>
