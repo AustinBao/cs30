@@ -1,23 +1,23 @@
 document.getElementById("add_meme").addEventListener("click", openModal);
 
-let modal = document.getElementById("memeModal");
-let form = document.getElementById("addMemeForm");
-let span = document.getElementById("addClose");
+let addmodal = document.getElementById("memeModal");
+let addform = document.getElementById("addMemeForm");
+let addspan = document.getElementById("addClose");
 
 function openModal() {
-  modal.style.display = "block";
+  addmodal.style.display = "block";
 }
 
 // when clicking the "x"
-span.onclick = function() {
-  modal.style.display = "none";
+addspan.onclick = function() {
+  addmodal.style.display = "none";
 }
 
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+  if (event.target == addmodal) {
+    addmodal.style.display = "none";
   }
 }
 

@@ -41,19 +41,19 @@ function deleteMeme(iconElement) {
 function editMeme(iconElement) {
   let card = iconElement.closest(".card2");
   let memeId = iconElement.dataset.id;
-  let modal = document.getElementById("editMemeModal");
-  let span = document.getElementById("editClose");
+  let editmodal = document.getElementById("editMemeModal");
+  let editspan = document.getElementById("editClose");
 
   if (card) {
-    modal.style.display = "block";
+    editmodal.style.display = "block";
 
-    span.onclick = function() {
-      modal.style.display = "none";
+    editspan.onclick = function() {
+      editmodal.style.display = "none";
     };
 
     window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
+      if (event.target == editmodal) {
+        editmodal.style.display = "none";
       }
     };
 
@@ -96,7 +96,7 @@ function editMeme(iconElement) {
       .then(response => response.json())
       .then(data => {
         if (data) {
-          modal.style.display = "none";
+          editmodal.style.display = "none";
           console.log("Meme edited:", data);
           location.reload();
         } else {
