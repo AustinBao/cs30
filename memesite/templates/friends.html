@@ -2,7 +2,6 @@
 {% extends "base.html" %}
 
 {% block extra_files %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script defer src="{{ url_for('static', filename='js/find_friends.js') }}"></script>
@@ -19,8 +18,17 @@
     <input class="inputBox" id="friends_search" type="text" autocomplete="off" placeholder="Search For Friends">
   </div>
 
-  {% if status %}
-    <h5 id="status" class="center">{{ status }}</h5>
+  <h5 id="status" class="center">{{ status }}</h5>
+
+  {% if status == "" %}
+  <!-- Initially fill the page but dont display an error message -->
+    <h1 class="filler" style="display:block">ENTER USERNAME</h1>
+  {% elif status == "Found friend in database" %}
+  <!-- wont display if success ("SUCCESS" wont be shown)-->
+    <h1 class="filler" style="display:none">SUCCESS</h1>
+  {% else %}
+  <!-- will display when error in finding friend -->
+    <h1 class="filler" style="display:block">ERROR</h1>
   {% endif %}
 
   <div class="memeContainer">
