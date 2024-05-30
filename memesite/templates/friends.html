@@ -24,7 +24,7 @@
   <!-- Initially fill the page but dont display an error message -->
     <h1 class="filler" style="display:block">ENTER USERNAME</h1>
   {% elif status == "Found friend in database" %}
-  <!-- wont display if success ("SUCCESS" wont be shown)-->
+  <!-- wont display if successfully queried db ("SUCCESS" wont be shown)-->
     <h1 class="filler" style="display:none">SUCCESS</h1>
   {% else %}
   <!-- will display when error in finding friend -->

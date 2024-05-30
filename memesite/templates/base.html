@@ -12,45 +12,47 @@
     <title>Memesite</title>
 </head>
 
-<header>
-    <h1>MEMESITE</h1>
-    <a href="/signup">SIGNUP</a> 
-    <a href="/login">LOGIN</a> 
-    <a href="/">HOME</a>   
-    <a href="/logout">LOGOUT</a>
-    <a href="/friends">FRIENDS</a>  
-</header>
+<body>
+    <header>
+        <h1>MEMESITE</h1>
+        <a href="/signup">SIGNUP</a> 
+        <a href="/login">LOGIN</a> 
+        <a href="/">HOME</a>   
+        <a href="/logout">LOGOUT</a>
+        <a href="/friends">FRIENDS</a>  
+    </header>
 
-<body> 
-    {% block content %}
-        <!-- template inserted here -->
-    {% endblock %}
-</body>
+    <main> 
+        {% block content %}
+            <!-- template content inserted here -->
+        {% endblock %}
+    </main>
 
-<footer>
-    <h3 id="guide"> Guide </h3>
+    <footer>
+        <h3 id="guide"> Guide </h3>
 
-    <div id="guideModal" class="modal">
-        <div class="modalContent">
-        
-            <div class="modalHeader">
-                <span id="guideClose" class="close">&times;</span>
-                <h2> How this website works </h2>
-                <p> A quick introduction</p>
-                <hr>
-            </div>
-           
-            <div class="modalBody">
-                <ul>
-                    <li>Create an account by entering your info on the sign up page (click "SIGN UP" link on top left).</li>
-                    <li>Login to that account to gain other features of the website.</li>
-                    <li>Immediatly, you can add memes by clicking the "Add meme" button. This should pop up a form.</li>
-                    <li>After submitting the meme, it should now display on the home page as a card. You can edit or delete said meme.</li>
-                    <li>The "FRIENDS" link will bring you to a page where you can search what memes your friends have added.</li>
-                    <li>Finally, "LOGOUT" will log you out of your account and end your session.</li>
-                </ul>  
+        <div id="guideModal" class="modal">
+            <div class="modalContent">
+            
+                <div class="modalHeader">
+                    <span id="guideClose" class="close">&times;</span>
+                    <h2> How this website works </h2>
+                    <p> A quick introduction</p>
+                    <hr>
+                </div>
+            
+                <div class="modalBody">
+                    <ul>
+                        <li>Create an account by entering your info on the sign up page (click "SIGN UP" link on top left).</li>
+                        <li>Login to that account to gain other features of the website.</li>
+                        <li>Immediatly, you can add memes by clicking the "Add meme" button. This should pop up a form.</li>
+                        <li>After submitting the meme, it should now display on the home page as a card. You can edit or delete said meme.</li>
+                        <li>The "FRIENDS" link will bring you to a page where you can search what memes your friends have added.</li>
+                        <li>Finally, "LOGOUT" will log you out of your account and end your session.</li>
+                    </ul>  
+                </div>
             </div>
         </div>
-      </div>
-</footer>
+    </footer>
+</body>
 </html>

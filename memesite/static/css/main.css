@@ -1,15 +1,22 @@
+:root {
+  --cardwidth : 250px;
+  --cardheight : 400px;
+  --cardbkgcolor: #05060f0a;
+  --cardtextcolor: #05060f99;
+}
+
+
 
 /* ~~~ CSS FOR FOOTER/GUIDE ~~~ */
 
 footer {
-  margin-top: 60px;
+  min-height: 50px;
+
+  margin-top: 50px;
   background-color: #333;
   color: #fff;
   text-align: center;
-  height: 70px;
   width: 100%;
-  position: static;
-  bottom: 0;
   font-size: 20px;
   padding: 20px;
 } 
@@ -23,6 +30,8 @@ li {
 /* ~~~ GENERAL CSS FOR STUFF ~~~ */
 
 header {
+  min-height: 50px;
+
   position: sticky;
   z-index: 1000;
   top: 0;
@@ -43,7 +52,17 @@ a {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+/* makes the footer and header responsive by filling in any empty space essentially */
+main {
+  flex: 1;
+}
+
 body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+
   background-color: var(--background);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -54,40 +73,6 @@ body {
   margin-top: 20px;
   margin-bottom: 25px;
 }
-
-/* html,body,#wrapper {
-  height:100%;
-  margin:0;
-  padding:0;
-}
-#wrapper {
-  position:relative;
-}
-
-#top, #middle, #bottom {
-  position:absolute;
-}
-
-#top {
-  height:50px;
-  width:100%;
-  background:grey;
-}
-#middle {
-  top:50px;
-  bottom:50px;
-  width:100%;
-  background:black;
-}
-#bottom {
-  bottom:0;
-  height:50px;
-  width:100%;
-  background:grey;
-} */
-
-
-
 
 /* ~~~ EVERYTHING TO DO WITH MODAL ~~~ */
 
@@ -170,26 +155,27 @@ body {
 .card {
   /* Makes sure the modal appears above the card */
   z-index: 1; 
-  width: 250px;
-  height: 400px;
-  background-color: #05060f0a;
+  width: var(--cardwidth);
+  height: var(--cardheight);
+  background-color: var(--cardbkgcolor);
   border-radius: 20px;
   transition: all .3s;
 }
 
 .card2 {
-  width: 250px;
-  height: 400px;
-  background-color: #05060f0a;
+  width: var(--cardwidth);
+  height: var(--cardheight);
+  background-color: var(--cardbkgcolor);
   border-radius:20px;
-  color: #05060f99;
+  color: var(--cardtextcolor);
   text-align: center;
   transition: all .2s;
+  /* break longs text from user input*/
+  word-wrap: break-word;
 }
 
 .card2:hover {
   transform: scale(0.98);
-  border-radius: 20px;
 }
 
 .card:hover {
@@ -202,6 +188,12 @@ body {
 
 .memeInfo {
   padding: 3px;
+  width: var(--cardwidth);
+}
+
+span {
+  /* makes sure long texts are broken at white spaces */
+  white-space: normal;
 }
 
 .memeImg {
@@ -213,6 +205,7 @@ body {
   color: #71797E	;
   font-size: 20px;
   font-weight: bold;
+  width: var(--cardwidth) ;
 }
 
 .memeDescription, .memeYear , .memeSource {
