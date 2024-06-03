@@ -24,8 +24,8 @@
                     <input autocomplete="off" name="password" id="password" type="password" required>
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
-                            <p>{{ messages[0] }}</p>
-                            <a href="https://www.chess.com/home">{{ messages[1] }}</a>     
+                            <p style="color: tomato;">{{ messages[0] }}</p>
+                            <p>{{ messages[1] }}</p>     
                         {% endif %}
                     {% endwith %}
                 </div>

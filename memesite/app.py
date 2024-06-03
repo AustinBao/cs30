@@ -41,10 +41,6 @@ class Meme:
             'user_id': session['user_id']
         }
         app.db.memes.insert_one(meme_data)
-
-    def last_seen(self):
-        current_year = datetime.date.today().year
-        return current_year - self.year
     
     def update_in_db(self, meme_id):
         updated_meme = {
@@ -54,19 +50,20 @@ class Meme:
             'year': self.year,
             'source': self.source 
         }
-        # delete past image when edited
+        # delete past images of edited memes ONLY if the new meme's image is NOT the same as current
         old_meme = app.db.memes.find_one({'_id': ObjectId(meme_id)})
-        file_path = f"./static/meme_imgs/{old_meme['image_name']}"
+        
+        if old_meme['image_name'] != self.image_name:
+            file_path = f"./static/meme_imgs/{old_meme['image_name']}"
 
-        print(f"Attempting to delete: {file_path}")
-        if os.path.exists(file_path):
-            try:
-                os.remove(file_path)
-                print(f"File {file_path} deleted successfully.")
-            except Exception as e:
-                print(f"Error deleting file: {e}")
-        else:
-            print("File does not exist.")
+            if os.path.exists(file_path):
+                try:
+                    os.remove(file_path)
+                    print(f"File {file_path} deleted successfully.")
+                except Exception as e:
+                    print(f"Error deleting file: {e}")
+            else:
+                print("File does not exist.")
         # update database
         result = app.db.memes.update_one({'_id': ObjectId(meme_id)}, {'$set': updated_meme})
         return result
@@ -141,7 +138,7 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Invalid username or password')
-            flash('reset password')
+            flash('Try again')
             
     return render_template('login.html')
 
