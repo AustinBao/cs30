@@ -1,2 +1,12 @@
 <!-- WHEN FLASK ISNT IN THE SAME DIRECTORY -->
 <!-- https://stackoverflow.com/questions/58675081/why-does-running-flask-run-on-windows-result-in-flask-is-not-recognized-as-an -->
+
+
+STEPS:
+cd cs30
+cd memesite
+venv\Scripts\activate
+flask run 
+OR
+python -m flask run 
+

@@ -2,7 +2,6 @@
 # python -m flask run 
 
 import os
-import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,6 +21,21 @@ app.db = client.memesite
 # creates local storage for images if not already present
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+
+
+def delete_old_memes_img(old_meme):
+    file_path = f"./static/meme_imgs/{old_meme['image_name']}"
+
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+            return True
+        except Exception as e:
+            return e
+    else:
+        return False
+
 
 class Meme:
     def __init__(self, image_name, name, description, year, source):
@@ -54,19 +68,14 @@ class Meme:
         old_meme = app.db.memes.find_one({'_id': ObjectId(meme_id)})
         
         if old_meme['image_name'] != self.image_name:
-            file_path = f"./static/meme_imgs/{old_meme['image_name']}"
+            delete_old_memes_img(old_meme)
 
-            if os.path.exists(file_path):
-                try:
-                    os.remove(file_path)
-                    print(f"File {file_path} deleted successfully.")
-                except Exception as e:
-                    print(f"Error deleting file: {e}")
-            else:
-                print("File does not exist.")
         # update database
         result = app.db.memes.update_one({'_id': ObjectId(meme_id)}, {'$set': updated_meme})
         return result
+
+
+     
 
 
 @app.route("/", methods=['GET', 'POST', 'PUT'])
@@ -182,6 +191,9 @@ def friends():
 # FLask takes the URL parameter (<meme_id>) and automatically passes it to the "delete_meme" function as the "meme_id" argument
 @app.route('/delete_meme/<meme_id>', methods=['DELETE'])
 def delete_meme(meme_id):
+    old_meme = app.db.memes.find_one({'_id': ObjectId(meme_id)})
+    delete_old_memes_img(old_meme)
+    
     success = app.db.memes.delete_one({'_id': ObjectId(meme_id)})
     if success:
         return jsonify({'message': 'Meme deleted successfully'}), 200
