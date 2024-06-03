@@ -6,15 +6,11 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Looping through all "trash" icons and adding a click eventlistener that calls "deleteMeme" function
     for (let i = 0; i < deleteIcons.length; i++) {
-        deleteIcons[i].addEventListener("click", function() {
-        deleteMeme(this);
-        });
+        deleteIcons[i].addEventListener("click", function() { deleteMeme(this) });
     }
     // Looping through all "edit" icons and adding a click eventlistener that calls "editMeme" function
     for (let i = 0; i < editIcons.length; i++) {
-        editIcons[i].addEventListener("click", function() {
-        editMeme(this);
-        });
+        editIcons[i].addEventListener("click", function() { editMeme(this) });
     }
   });
 

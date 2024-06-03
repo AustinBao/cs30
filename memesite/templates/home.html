@@ -32,11 +32,12 @@
           <div class="memeFormInfo">
             <img id="imageDisplay" class="imageDisplay" src="#" hidden>
             <input type="file" id="memeImage" name="memeImage" accept="image/*" required>
-            <input type="text" id="memeName" name="memeName" placeholder="Name" required>
-            <input type="text" id="memeDescription" name="memeDescription" placeholder="Description" required>
-            <input type="number" id="memeYear" name="memeYear" placeholder="When?" required>
-            <input type="text" id="memeSource" name="memeSource" placeholder="Where?" required>
-            <button type="submit" >Submit</button>
+            <input type="text" id="memeName" name="memeName" maxlength="20" placeholder="Name" required>
+            <input type="text" id="memeDescription" name="memeDescription" maxlength="20" placeholder="Description" required>
+            <!-- YEAR OF THE FIRST MEME EVER MADE SET AS MIN VALUE - https://www.bbc.com/news/blogs-trending-43783521 -->
+            <input type="number" id="memeYear" name="memeYear" min="1921" max="2024" placeholder="Year" required>
+            <input type="text" id="memeSource" name="memeSource" maxlength="20" placeholder="Source" required>
+            <button type="submit" >Add</button>
           </div> 
           
         </form>
@@ -57,13 +58,15 @@
         <form id="editMemeForm" enctype="multipart/form-data">
 
           <div class="memeFormInfo">
-              <img id="editImageDisplay" class="imageDisplay" src="#" hidden>
-              <input type="file" id="editImage" name="editImage" accept="image/*" required>
-              <input type="text" id="editName" name="editName" placeholder="Name" required>
-              <input type="text" id="editDescription" name="editDescription" placeholder="Description" required>
-              <input type="number" id="editYear" name="editYear"  placeholder="When?" required>
-              <input type="text" id="editSource" name="editSource" placeholder="Where?" required>
-              <button type="submit" >Submit</button>
+            <!-- Cant set same image when editing meme due to security reasons -->
+            <!-- https://www.geeksforgeeks.org/how-to-set-a-value-to-an-input-file-using-html/ -->
+            <img id="editImageDisplay" class="imageDisplay" src="#" hidden>
+            <input type="file" id="editImage" name="editImage" accept="image/*" required>
+            <input type="text" id="editName" name="editName" maxlength="20" placeholder="Name" required>
+            <input type="text" id="editDescription" name="editDescription" maxlength="20" placeholder="Description" required>
+            <input type="number" id="editYear" name="editYear" min="1921" max="2024" placeholder="Year"  required>
+            <input type="text" id="editSource" name="editSource" maxlength="20" placeholder="Source" required>
+            <button type="submit" >Edit</button>
           </div>
 
         </form>
