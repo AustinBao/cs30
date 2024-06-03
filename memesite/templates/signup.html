@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block header_links %}
+    <a href="/signup">SIGNUP</a> 
+    <a href="/login">LOGIN</a>
+{% endblock %}  
+
 
 {% block extra_files %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/signupandin.css') }}" >

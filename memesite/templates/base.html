@@ -15,11 +15,10 @@
 <body>
     <header>
         <h1>MEMESITE</h1>
-        <a href="/signup">SIGNUP</a> 
-        <a href="/login">LOGIN</a> 
-        <a href="/">HOME</a>   
-        <a href="/logout">LOGOUT</a>
-        <a href="/friends">FRIENDS</a>  
+
+        {% block header_links %}
+        <!-- header links goes here -->
+        {% endblock %}  
     </header>
 
     <main> 
